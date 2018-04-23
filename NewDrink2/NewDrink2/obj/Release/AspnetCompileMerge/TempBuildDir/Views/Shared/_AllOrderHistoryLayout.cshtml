@@ -1,0 +1,83 @@
+﻿@using NewDrink2.Models
+@{
+    string Identity1 = NewDrink2.Models.Helper.GetUserIdentity();
+    string Identity2 = NewDrink2.Models.Helper.GetUserIdentity2();
+
+    string BuyDrink = Helper.GetUserBuyDrink();
+    string OrderSet = Helper.GetUserOrderSet();
+    string Message = Helper.GetUserMessage();
+    string Callnotice = Helper.GetUserCallnotice();
+    string ChangePsd = Helper.GetUserChangePsd();
+    string[] UserLimit = { BuyDrink, OrderSet, Message, Callnotice, ChangePsd };
+
+    string UserMail = NewDrink2.Models.Helper.GetUserMail();
+    int Mess2 = NewDrink2.Models.HomeModels.GetHowManyMessage_UseUserEmail(UserMail);
+    int EndMsg = NewDrink2.Models.HomeModels.GetHowManyEndMessage_UseUserEmail(UserMail);
+    int Mess = Mess2 + EndMsg;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Drinks!</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <style>
+        .navSecond{
+            line-height: 50px;
+            width: 25%;
+            display: block;
+            text-align: center;
+        }
+        .bgColor {
+            background-color: #04c6c4;
+            vertical-align: middle;
+            line-height: 45px;
+            color: #fff;
+            text-align: center;
+        }
+
+        a {
+            text-decoration: none !important;
+        }
+
+        .TextSizeCh2 {
+            font-family: 'Microsoft JhengHei', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
+    </style>
+
+</head>
+<body>
+    <a href="@Url.Action("SettingHome", "Home")" style="float: left; z-index: 999999; max-width: 50px; max-height: 50px;" class="navbar-fixed-top text-center">
+        <font color="#ffffff" size="5" style="line-height: 200%;" class="TextSizeCh2">
+            ＜
+        </font>
+    </a>
+    <nav class="navbar navbar-fixed-top bgColor">         
+        <div style="margin-top: 5px;">
+            <font color="#ffffff" style="line-height: 200%;font-size: 20px;" class="TextSizeCh2">
+                歷史訂單
+            </font>
+        </div>
+    </nav>
+    <div style="z-index: 999999; position: fixed; top:0; right: 0;">
+        @Html.Partial("_LogoutPartial")
+    </div>
+    
+    <div class="container-fluid">
+        @RenderBody()
+    </div>
+
+
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
+
+
+

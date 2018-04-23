@@ -1,0 +1,78 @@
+﻿@model PagedList.IPagedList<NewDrink2.Models.User>
+@using PagedList.Mvc;
+
+@{ 
+    Layout = "~/Views/Shared/_MyUserLayoutPartial.cshtml";
+}
+
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+<h2>管理使用者</h2>
+
+@using (Html.BeginForm("MyUser", "Manager", FormMethod.Get))
+{
+    <div class="row">
+        <div class="col-lg-4" style="width: 340px;">
+            <div class="input-group">
+                @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @class="form-control", @placeholder = "搜尋使用者..." })
+                <span class="input-group-btn">
+                    <input class="btn btn-default" type="submit" value="搜尋">
+                </span>
+            </div><!-- /input-group -->
+        </div><!-- /.col-lg-6 -->
+    </div>
+}
+
+<br />
+@Html.ActionLink("新增成員", "AddUser", routeValues: null)
+<table class="table">
+    <tr class="active">
+        <th>
+            @*@Html.ActionLink("姓名", "MyUser", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })*@
+            @Html.DisplayName("姓名")
+        </th>
+        <th>
+            @Html.DisplayName("電子郵件")
+        </th>
+        <th>
+            @Html.DisplayName("身份")
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @if (item.Identity == 1)
+                {
+                    @Html.DisplayName("管理者")
+                }
+                else if (item.Identity == 2)
+                {
+                    @Html.DisplayName("成員")
+                }
+            </td>
+            <td>
+                @Html.ActionLink("修改", "MyUserEdit", new { id = item.ID })
+                @Html.ActionLink("詳細", "MyUserDetails", new { id = item.ID })
+                @Html.ActionLink("刪除", "MyUserDelete", new { id = item.ID })
+            </td>
+        </tr>
+    }
+
+</table>
+
+頁數 @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) 至 @Model.PageCount
+@Html.PagedListPager(Model, page => Url.Action("MyUser", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+@Html.ActionLink("返回", "ManagerHome", "Home", routeValues: null, htmlAttributes: new { @class = "btn btn-default" })
+
+
+
+

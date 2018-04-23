@@ -1,0 +1,59 @@
+﻿@model NewDrink2.Models.User
+
+@{
+    Layout = "~/Views/Shared/_MyUserLayoutPartial.cshtml";
+    ViewBag.Title = "成員詳細資料";
+}
+<style>
+
+</style>
+
+<h2>@ViewBag.Title</h2>
+<div>
+    <h4>使用者: @Html.DisplayFor(model => model.Name)</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt>
+            @Html.DisplayName("身分")
+        </dt>
+        <dd>
+            @*@{
+                Html.RenderAction("_DetailsIdentityPartial", new { ID = Model.ID });
+            }*@
+            @if (Model.Identity == 2)
+            {
+                @Html.Label("會員")
+            }
+            @if (Model.Identity == 1)
+            {
+                @Html.Label("管理者")
+            }
+        </dd>
+        <dt>
+            @Html.DisplayName("權限")
+        </dt>
+        <dd>
+            @{
+                Html.RenderAction("_DetailsCanDoPartial", new { ID = Model.ID });
+            }
+        </dd>
+    </dl>
+</div>
+
+<br />
+<p>
+    @Html.ActionLink("修改", "MyUserEdit", new { id = Model.ID }, new { @class = "btn btn-success" })
+    @Html.ActionLink("返回", "MyUser", routeValues: null, htmlAttributes: new { @class = "btn btn-default" })
+</p>

@@ -1,0 +1,26 @@
+﻿@using NewDrink2.Models
+@model NewDrink2.Models.ChangeMem
+
+<style>
+    .TextSizeCh {
+        font-family: 'Microsoft JhengHei', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    }
+
+
+</style>
+
+@for (int i = 0; i < Model.Member.Count; i++)
+{
+    <div class="col-sm-5 TextSizeCh">
+        @Html.HiddenFor(model => model.Member[i].Value)
+        @Html.CheckBoxFor(model => model.Member[i].Selected)
+        @Html.DisplayFor(model => model.Member[i].Text)
+        <br />
+    </div>
+}
+
+
+
+
+
+    

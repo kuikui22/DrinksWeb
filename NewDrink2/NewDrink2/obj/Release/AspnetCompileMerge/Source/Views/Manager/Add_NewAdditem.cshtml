@@ -1,0 +1,99 @@
+﻿@using NewDrink2.Models
+@model NewDrink2.Models.AddItemCreateEdit
+@{
+    Layout = "~/Views/Shared/_Add_NewLayout.cshtml";
+    ViewBag.Title = "編輯配料";
+}
+
+<div class="pull-left" style="max-width: 10%; left: 0;">
+    <a href="" onclick="javascript: history.go(-1); return false;">
+        <img src="../../image/xicon.png" style="max-width: 20px;" />
+    </a>
+</div>
+
+<br />
+<center>
+    <h2>@ViewBag.Title</h2>
+</center>
+<br />
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => Model.MenuID);
+    <p class="text-danger">@ViewBag.PriceSmall</p>
+    <div class="col-md-12">
+        <table class="table" id="newAdd">
+            <tr class="active">
+                <td>配料</td>
+                <td>大杯價</td>
+                <td>中杯價</td>
+                <td>小杯價</td>
+                <td></td>
+            </tr>
+            @if (Model.AddCreateEditOther == null || Model.AddCreateEditOther.Count == 0)
+            {
+                <tr>
+                    <td colspan="5">
+                        <p class="text-danger">請增加一列.</p>
+                    </td>
+                </tr>
+            }
+            else
+            {
+                foreach (AddCreateEditOther item in Model.AddCreateEditOther)
+                {
+                    Html.RenderPartial("_MyMenuAdditemEditEntry", item);
+                }
+            }
+            @if (Model.AddCreateNewOther == null || Model.AddCreateNewOther.Count == 0)
+            {
+
+            }
+            else
+            {
+                foreach (AddCreateEditOther item in Model.AddCreateNewOther)
+                {
+                    Html.RenderPartial("_MyMenuAdditemNewEditEntry", item);
+                }
+            }
+        </table>
+        <a id="addNewLine" href="#">新增品項</a>
+        <br />
+    </div>
+
+    <div class="col-md-10" style="margin-top: 20px;">
+        <input type="submit" value="儲存" class="btn btn-success" />
+        @Html.ActionLink("返回", "", routeValues: null, htmlAttributes: new { @class = "btn btn-default", @onclick = "javascript: history.go(-1); return false;" })
+    </div>
+}
+
+@section Scripts {
+    <script>
+            $(function () {
+                $("#newAdd").sortable;
+                $("#addNewLine").click(function () {
+                    $.ajax({
+                        type: 'GET',
+                        url: '@Url.Action("_MyMenuAdditemNewEditEntry", "Manager")',
+                        data: { id: @Model.MenuID}
+                    })
+                        .done(function (template) {
+                            $("#newAdd").append(template);
+                        });
+                });
+            });
+
+        function ChangeVAndDelete(obj)
+        {
+
+            $(obj).parent().parent('tr').css('display', "none");
+            $(obj).parent('td').children('input:hidden').val("True");
+            //alert($(obj).parent('td').children('input:hidden').val());
+            //$(obj).parent().parent('tr').remove();
+        }
+    </script>
+}
+
+
+
+

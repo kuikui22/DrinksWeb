@@ -1,0 +1,31 @@
+﻿@using NewDrink2.Models
+@{
+    string MyUserSet = Helper.GetUserMyUserSet();
+    string MyMenuSet = Helper.GetUserMyMenuSet();
+}
+
+<a class="list-group-item ListLine" href="@Url.Action("Add_IndexImeage", "Manager")" style="border-top: solid 1px #ffffff;">
+    <h4 class="TextSizeCh">
+        <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+        管理首頁圖片
+    </h4>
+</a>
+
+@if (MyUserSet == "True")
+{
+    <a class="list-group-item ListLine" href="@Url.Action("MyUser", "Manager")">
+        <h4 class="TextSizeCh">
+            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+            管理使用者           
+        </h4>
+    </a>
+}
+@if (MyMenuSet == "True")
+{
+    <a class="list-group-item ListLine2" href="@Url.Action("MyMenu", "Manager")">
+        <h4 class="TextSizeCh">
+            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+            管理菜單            
+        </h4>
+    </a>
+}

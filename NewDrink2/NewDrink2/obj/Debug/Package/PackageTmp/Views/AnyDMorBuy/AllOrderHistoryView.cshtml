@@ -1,0 +1,107 @@
+﻿@using NewDrink2.Models
+@model IEnumerable<NewDrink2.Models.AllOrder_View>
+
+@{
+    Layout = "~/Views/Shared/_AllOrderLayout.cshtml";
+}
+
+<style>
+    a {
+        text-decoration: none !important;
+    }
+
+    .NavbarBgColor {
+        margin-top: 50px;
+        background-color: #ffffff;
+    }
+
+    .TopStyle {
+        width: 50%;
+        height: 48px;
+        display: block;
+        line-height: 48px;
+        text-align: center;
+    }
+
+    .bottomTotNav {
+        margin-bottom: 50px;
+    }
+
+    .tag01 {
+        background-color: #ff5e73;
+        color: #ffffff;
+        border-radius: 10px;
+        font-size: 14px;
+        padding: 2px 6px 2px 6px;
+    }
+
+    .tag02 {
+        background-color: #808080;
+        color: #ffffff;
+        border-radius: 10px;
+        font-size: 14px;
+        padding: 2px 6px 2px 6px;
+    }
+
+    .TextSizeCh {
+        font-family: 'Microsoft JhengHei', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    }
+</style>
+<nav class="navbar navbar-fixed-top NavbarBgColor" style="border-bottom: solid 1px #c1bdbd">
+    <a href="@Url.Action("AllOrderView", "AnyDMorBuy")" style="color: #04c6c4">
+        <div class="pull-left TopStyle">
+            <font size="3" class="TextSizeCh">選購中訂單</font>
+        </div>
+    </a>
+    <a href="#" style="color: #04c6c4">
+        <div class="pull-right TopStyle" style="border-bottom: solid 4px #04c6c4">
+            <font size="3" class="TextSizeCh">歷史訂單</font>
+        </div>
+    </a>
+</nav>
+<div style="margin-top: 50px;">
+    @if (Model == null || Model.Count() == 0)
+    {
+        <center>
+            <br /><br />
+            <p class="TextSizeCh">目前尚無任何紀錄.</p>
+        </center>
+    }
+    else
+    {
+        <div class="list-group">
+            @foreach (var item in Model)
+            {
+                <a href="@Url.Action("OrderingDetail_History", "AnyDMorBuy", new { OrderID = item.OrderID })" class="list-group-item" style="font-size: 18px;">
+                    <div class="pull-left" style="line-height: 75px; margin-right: 10px;">
+                        <img src="../image/drink3ex2.png" />
+                    </div>
+                    <font class="TextSizeCh" style="font-size: 17px;">
+                        團長: @Html.DisplayFor(modelItem => item.UserName)
+                    </font><br />
+                    <font class="TextSizeCh" style="font-size: 17px; color: #a3a1a1">                        
+                        @Html.DisplayFor(modelItem => item.MenuName)
+                    </font><br />
+                    <small style="color: #04c6c4" class="TextSizeCh">
+                        <img src="../../image/timer.png" style="max-width: 15px;" />
+                        @Html.DisplayFor(modelItem => item.CreateTime)
+                    </small>
+                    @if (item.CanOrder == 1)
+                    {
+                        <span class="tag01 TextSizeCh pull-right">
+                            取消訂單
+                        </span>
+                    }
+                    @if (item.CanOrder == 2)
+                    {
+                        <span class="tag02 TextSizeCh pull-right">
+                            結束訂購
+                        </span>
+                    }
+                    <br />                  
+                </a>
+            }
+        </div>
+    }
+</div>
+

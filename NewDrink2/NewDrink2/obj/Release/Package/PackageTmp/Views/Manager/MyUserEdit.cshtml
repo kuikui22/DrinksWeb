@@ -1,0 +1,103 @@
+﻿@model NewDrink2.Models.User
+
+@{
+    Layout = "~/Views/Shared/_MyUserLayoutPartial.cshtml";
+    ViewBag.Title = "修改";
+}
+
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+    <div class="form-horizontal">
+        <h4>修改使用者相關資料</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.ID)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Identity, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @*@{
+                    Html.RenderAction("_ChangeIdentityPartial", new { ID = Model.ID });
+                }*@
+                @if (Model.Identity == 2)
+                {
+                    @Html.RadioButtonFor(model => model.Identity, 2, new { @Check = true, @onclick = "ChangeTable('2');" })
+                    @Html.Label("會員")
+                    @Html.RadioButtonFor(model => model.Identity, 1, new { @onclick = "ChangeTable('1');" })
+                    @Html.Label("管理者")
+                }
+                @if (Model.Identity == 1)
+                {
+                    @Html.RadioButtonFor(model => model.Identity, 2, new { @onclick = "ChangeTable('2');" })
+                    @Html.Label("會員")
+                    @Html.RadioButtonFor(model => model.Identity, 1, new { @Check = true, @onclick = "ChangeTable('1');" })
+                    @Html.Label("管理者")
+                }
+            
+                <p class="text-danger">@ViewBag.IdentityError</p>
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.Label("權限", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10" id="Here">
+                @ViewBag.ErrorMessage
+                @{
+                    Html.RenderAction("_ChangeCanDoPartial", new { ID = Model.ID, Can = Model.Identity.ToString() });
+                }
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="儲存" class="btn btn-success" />
+                @Html.ActionLink("返回", "MyUser", routeValues: null, htmlAttributes: new { @class = "btn btn-default" })
+            </div>
+        </div>
+    </div>
+}
+
+
+@section Scripts{
+@Scripts.Render("~/bundles/jqueryval")
+    <script>
+
+        $("#checkAll").change(function (e) {
+            $("input:checkbox").prop('checked', $(this).prop("checked"));
+           //$("input:checkbox[name=BuyDrink]").prop('checked', $(this).prop("checked"));
+           //$("input:checkbox[name=OrderSet]").prop('checked', $(this).prop("checked"));
+           //$("input:checkbox[name=Message]").prop('checked', $(this).prop("checked"));
+           //$("input:checkbox[name=Callnotice]").prop('checked', $(this).prop("checked"));
+           //$("input:checkbox[name=ChangePsd]").prop('checked', $(this).prop("checked"));
+        });
+        $("#checkAll2").change(function (e) {
+            $("input:checkbox").prop('checked', $(this).prop("checked"));
+            //$("input:checkbox[name=MyUserSet]").prop('checked', $(this).prop("checked"));
+            //$("input:checkbox[name=MyMenuSet]").prop('checked', $(this).prop("checked"));
+        });
+
+        function ChangeTable(value) {
+            var nValue = "" + value;
+
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("_ChangeCanDoPartial", "Manager")',
+                data: { ID: @Model.ID, Can: nValue }
+            })
+                .done(function (msg) {
+                    $('#Here').html(msg);
+                });
+
+        }
+
+
+    </script>
+}

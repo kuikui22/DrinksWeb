@@ -1,0 +1,93 @@
+﻿@model NewDrink2.Models.LoginViewModel
+@{
+    Layout = null;
+    ViewBag.Title = "登入";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    <style>
+        #jum_back {
+            background: url("../image/06.jpg") no-repeat;
+            background-size: cover;
+        }
+
+        .imgwrapper {
+            min-width: 100%;
+            max-height: 100%;
+        }
+
+        #fontH {
+            min-height: 100px;
+        }
+        .divBGimg {
+            margin: 0 auto;
+            background-image: url(../image/loginback.jpg);
+            float: none;
+        }
+    </style>
+</head>
+<body style="background-color:#faf9f9">
+    <div class="container body-content"> 
+        <center>
+            <img src="../image/drinkBlue2.png" /><br />
+            <h3 style="margin-top: 10px;"><b>線上訂飲料系統</b></h3>
+        </center>
+        <div class="col-md-6 divBGimg">            
+            <br />
+            <section id="liginForm" style="margin-left: 8%;">
+                @using (Html.BeginForm("Index", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                {
+                    <p><h4>使用E-Mail登入</h4></p>
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="text-danger">
+                            @ViewBag.Error
+                            @ViewBag.NotUsingMessage
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label text-center" })
+                            <div class="col-md-10">
+                                @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+                            <div class="col-md-10">
+                                @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <input type="submit" value="登入" class="btn btn-info col-md-10" />
+                            </div>
+                        </div>
+                }
+            </section>
+            <br /><br />
+        </div>
+
+
+
+
+
+
+
+    </div>
+
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }
+</body>
+</html>

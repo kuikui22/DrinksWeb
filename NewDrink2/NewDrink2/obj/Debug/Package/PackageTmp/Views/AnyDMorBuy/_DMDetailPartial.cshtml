@@ -1,0 +1,47 @@
+﻿@using NewDrink2.Models
+@model IEnumerable<NewDrink2.Models.DMDrinksDetailView>
+
+@{ 
+    int MenuID = ViewBag.MenuID;
+}
+
+<style>
+    .NewBadge {
+        background-color: #acaaaa;
+        margin-right: 2px;
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        border-radius: 10px;
+        color: #ffffff;
+        padding-left: 5px;
+    }
+</style>
+
+<div class="list-group">
+    @foreach (var item in Model)
+    {
+        <a href='@Url.Action("DrinkDetail", "AnyDMorBuy", new { MenuID = MenuID, DrinkID = item.DrinkID, BuyCheck = ViewBag.OrderID })' class="list-group-item" style="font-size: 18px;">
+            <div class="pull-left" style="line-height: 50px; margin-right: 10px;">
+                <img src="../../image/drink4.png" />&nbsp;
+            </div>            
+            @Html.DisplayFor(model => item.DrinkName, new { @style = "font-size: 20px; font-family: 'Microsoft JhengHei', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;" })<br />            
+            @foreach (var itemP in item.DMDrinksPriceSize)
+            {
+                if (itemP.HotOrIce == 1)
+                {
+                    <span class="NewBadge" style="background-color: #ff5e73">
+                        @Html.DisplayFor(modelItem => itemP.DrinkSize, new { @style = "font-family: 'Microsoft JhengHei', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;" })
+                    </span>
+                    @Html.DisplayFor(modelItem => itemP.DrinkPrice, new { @style = "font-family: 'Microsoft JhengHei', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;" })
+                }
+                else
+                {
+                    <span class="NewBadge" style="background-color: #04c6c4">
+                        @Html.DisplayFor(modelItem => itemP.DrinkSize, new { @style = "font-family: 'Microsoft JhengHei', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;" })
+                    </span>
+                    @Html.DisplayFor(modelItem => itemP.DrinkPrice, new { @style = "font-family: 'Microsoft JhengHei', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;" })
+                }
+            }
+        </a>
+    }
+</div>

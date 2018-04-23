@@ -1,0 +1,24 @@
+﻿@using NewDrink2.Models
+@model NewDrink2.Models.AddItemCreate
+
+<li style="padding-bottom: 15px;">
+    @using (Html.BeginCollectionItem2("AddItemCreate"))
+    {
+        @Html.LabelFor(model => model.ItemName)
+        @Html.EditorFor(model => model.ItemName, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.ItemName, "", new { @class = "text-danger" })
+
+        @Html.LabelFor(model => model.LPrice)
+        @Html.EditorFor(model => model.LPrice, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.LPrice, "", new { @class = "text-danger" })
+
+        @Html.LabelFor(model => model.MPrice)
+        @Html.EditorFor(model => model.MPrice, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.MPrice, "", new { @class = "text-danger" })
+
+        @Html.LabelFor(model => model.SPrice)
+        @Html.EditorFor(model => model.SPrice, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.SPrice, "", new { @class = "text-danger" })
+        <a href="#" onclick="$(this).parent().remove();">刪除</a>
+    }
+</li>

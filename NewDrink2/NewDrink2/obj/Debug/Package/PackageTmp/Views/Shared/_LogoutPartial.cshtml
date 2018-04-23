@@ -1,0 +1,21 @@
+﻿@{
+    string UserName = NewDrink2.Models.Helper.GetUserName();
+}
+
+@using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="pull-right text-center" style="margin-right: 20px;">
+        <div class="pull-left" style="line-height: 50px;">
+            <span style="color: #ffffff;">
+                @UserName
+                &nbsp; &nbsp;
+            </span>
+        </div>
+        <div class="pull-right" style="line-height: 50px;">
+            <a href="javascript:document.getElementById('logoutForm').submit()" style="color: #ffffff;">
+                登出
+            </a>
+        </div>
+    </div>
+}

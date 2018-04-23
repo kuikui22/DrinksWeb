@@ -1,0 +1,47 @@
+﻿@using NewDrink2.Models
+@model IEnumerable<NewDrink2.Models.Menu>
+
+<style>
+    .crop-techniquel {
+        float: left;
+        margin: 0;
+        overflow: hidden;
+        border: 1px solid #eeeded;
+        max-width: 100%;
+        min-width:100%;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+        .crop-techniquel img {
+            margin: -20px -15px -40px -55px;
+            max-width: 100%;
+            min-width: 100%;
+        }
+    .DivShadow {
+        -moz-box-shadow: 0 4px 4px rgba(30%, 30%, 30%, 0.3);
+        -webkit-box-shadow: 0 4px 4px rgba(30%, 30%, 30%, 0.3);
+        box-shadow: 0 4px 4px rgba(30%, 30%, 30%, 0.3);
+    }
+</style>
+
+
+<table style="min-width: 780px;">
+    <tr>
+        @foreach (var item in Model)
+        {
+            <td style="width: 100px;">
+                <a href="@Url.Action("DMDetail", "AnyDMorBuy", new { id = item.ID })" style="color: #6c6a6a;">
+                    <div style="background-color: #ffffff; border-radius: 10px; margin: auto; max-width: 250px;" class="DivShadow">
+                        <p class="crop-techniquel text-center"><img src="../image/11B.jpg" style="margin: 0;"></p>
+                        <p style="font-size: 16px; padding-bottom: 0.3em;" class="TextSizeCh text-center"> 
+                            <span style="font-weight:bold;">@Html.DisplayFor(modelItem => item.MenuName)</span>                           
+                        </p>
+                    </div>
+                </a>               
+            </td>
+        }
+    </tr>
+</table>
+
+
+

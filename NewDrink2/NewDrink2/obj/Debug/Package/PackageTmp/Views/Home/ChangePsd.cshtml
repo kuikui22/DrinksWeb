@@ -1,0 +1,44 @@
+﻿@model NewDrink2.Models.ChangePsdView
+
+@{
+    Layout = "~/Views/Shared/_SettingHomeLayout.cshtml";
+    ViewBag.Title = "變更密碼";
+}
+<br /><br /><br />
+<div style="margin-left: 1em;">
+    <h2>@ViewBag.Title</h2>
+
+    @using (Html.BeginForm("ChangePsd", "Home", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        <hr />
+        @Html.ValidationSummary("", new { @class = "text-danger" })
+        <div class="text-danger">@ViewBag.Error</div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.OldPassword, new { @class = "col-md-2 control-label" })
+            <div class="form-md-10">
+                @Html.PasswordFor(m => m.OldPassword, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+            <div class="form-md-10">
+                @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
+            <div class="form-md-10">
+                @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+            </div>
+        </div>
+        <br />
+        <div class="form-group">
+            <div class="form-md-10">
+                <input type="submit" value="變更密碼" class="btn btn-success" />
+                @Html.ActionLink("返回", "Index", routeValues: null, htmlAttributes: new { @class = "btn btn-default" })
+            </div>
+        </div>
+
+    }
+
+</div>

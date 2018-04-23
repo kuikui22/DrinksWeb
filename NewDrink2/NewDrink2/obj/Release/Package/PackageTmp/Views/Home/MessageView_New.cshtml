@@ -1,0 +1,193 @@
+﻿@using NewDrink2.Models
+@model IEnumerable<NewDrink2.Models.SendMessageView>
+
+@{
+    Layout = "~/Views/Shared/_MessageViewPartial.cshtml";
+    var NullTime = Convert.ToDateTime("2000/1/1 12:00:00");
+    var strE = Convert.ToDateTime("1999-01-01 00:00:00");
+    var NowTime = DateTime.Now;
+}
+<style>
+    a {
+        text-decoration: none !important;
+    }
+
+    .bottomStyleR {
+        width: 90%;
+        height: 48px;
+        display: block;
+        line-height: 48px;
+        text-align: center;
+        background-color: #e4566c;
+        color: #ffffff;
+    }
+
+    .bottomStyleL {
+        width: 10%;
+        height: 48px;
+        display: block;
+        line-height: 48px;
+        text-align: center;
+        background-color: #fbca29;
+    }
+
+    .NavbarBgColor {
+        margin-top: 50px;
+    }
+
+    .TopStyle {
+        width: 33%;
+        height: 48px;
+        display: block;
+        line-height: 48px;
+        text-align: center;
+    }
+
+    .bottomTotNav {
+        margin-bottom: 50px;
+    }
+    .TextSizeCh {
+        font-family: 'Microsoft JhengHei', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    }
+    .ALink {
+        color: #04c6c4;
+        font-size: 16px;
+    }
+        .ALink:hover {
+            color: #6beeed;
+        }
+</style>
+
+<div style="margin-top: 50px;">
+    @if (!String.IsNullOrEmpty(ViewBag.NoMsg))
+    {
+        <br /><br /><br />
+        <center>
+            <img src="../image/noMessage.png" />
+        </center>
+        <br />
+        <p class="text-center TextSizeCh" style="color: #dcdcdc; font-size: 20px;">@ViewBag.NoMsg</p>
+    }    
+    @if (String.IsNullOrEmpty(ViewBag.NoMsg))
+    {
+        <div class="panel panel-default">
+            @foreach (var item in Model)
+            {
+                if (item.SentAlink == "結束" || item.SentAlink == "取消")
+                {
+                    <div class="panel-body listsline" style="font-size: 18px; border-bottom: solid 1px #d5d4d4;">
+                        <div class="pull-left TextSizeCh" style="min-width: 65%;">
+                            <div class="pull-left" style="line-height: 70px; margin-right: 10px;">
+                                <img src="../image/drink3ex2.png" />
+                            </div>
+                            <font style="color: #808080">
+                                主旨:
+                                @Html.DisplayFor(modelItem => item.SentSubject)
+                            </font><br />
+                            <font style="color: #808080;">
+                                內容:
+                                @Html.DisplayFor(modelItem => item.SentBody)
+                            </font><br />
+                        </div>
+                        <div class="pull-right TextSizeCh">
+                            <span class="pull-right TextSizeCh" style="line-height: 70px;">
+                                <a class="btn btn-info" href="@Url.Action("CheckEndReadBtn", "Home", new { id = item.ID })" onclick="return CheckOne()">
+                                    確認已讀
+                                </a>
+                            </span>                           
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="panel-body listsline" style="font-size: 18px; border-bottom: solid 1px #d5d4d4;">
+                        <div class="pull-left TextSizeCh" style="min-width: 65%;">
+                            <div class="pull-left" style="line-height: 70px; margin-right: 10px;">
+                                <img src="../image/drink3ex2.png" />
+                            </div>
+                            <font style="color: #808080">
+                                主旨:
+                                @Html.DisplayFor(modelItem => item.SentSubject)
+                            </font><br />
+                            <font style="color: #808080;">
+                                內容:
+                                @Html.DisplayFor(modelItem => item.SentBody)
+                            </font><br />
+                            <a href="@item.SentAlink" class="ALink">
+                                <img src="../../image/timer.png" style="max-width: 15px;" />
+                                @Html.DisplayFor(modelItem => item.SendTime)
+                                @if (item.EndOverTime > NullTime && item.EndOverTime != strE)
+                                {
+                                    var Etime = " 至 " + item.EndOverTime + " 止";
+                                    <font>@Etime</font>
+                                }
+                            </a>
+                        </div>
+                        <div class="pull-right TextSizeCh">
+                            <span class="pull-right TextSizeCh" style="line-height: 70px;">
+                                <a class="btn btn-info" href="@Url.Action("CheckRead_Button", "Home", new { checkID = item.ID })" onclick="return CheckOne()">
+                                    確認已讀
+                                </a>
+                            </span>
+                            <span class="pull-right TextSizeCh" style="line-height: 70px; margin-right: 10px;">
+                                <a class="btn btn-danger" href="#" data-toggle="modal" data-target=".@item.OrderID">
+                                    暫不訂飲料
+                                </a>
+                            </span>
+                        </div>
+                    </div>
+
+                    var str = item.OrderID + '2';
+
+                    <div class="modal fade @item.OrderID" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+                        <div class="modal-dialog modal-sm" role="document">
+                            <div class="modal-content" style="border-radius: 20px;">
+                                <div class="modal-body text-center TextSizeCh">
+                                    <font style="font-size: 16px; font-weight: bolder; color: #727272; margin-bottom: 20px;" class="modal-title text-center">提示</font><br />
+                                    <font style="color: #cccccc; margin-bottom: 10px; margin-top: 20px;">一旦確定不訂購就無法再於此訂單訂購了. <br />仍然不訂購嗎?</font>
+                                    <p class="text-center TextSizeCh" style=" margin-top: 20px;">
+                                        <a href="#" class="btn btn-default" data-dismiss="modal" style="width: 30%; border-radius: 20px;">取消</a>
+                                        <a href="#" data-toggle="modal" data-target=".@str" class="btn btn-info" style="width: 30%; border-radius: 20px; background: #04c6c4" onclick="CheckOne(@item.OrderID)">確認</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal fade @str" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+                        <div class="modal-dialog modal-sm" role="document">
+                            <div class="modal-content" style="border-radius: 20px;">
+                                <div class="modal-body text-center TextSizeCh">
+                                    <font style="font-size: 16px; font-weight: bolder; color: #727272; margin-bottom: 20px;" class="modal-title text-center">提示</font><br />
+                                    <font style="color: #cccccc; margin-bottom: 10px; margin-top: 20px;">真的確定不訂購嗎?</font>
+                                    <p class="text-center TextSizeCh" style=" margin-top: 20px;">
+                                        <a href="#" class="btn btn-default" data-dismiss="modal" style="width: 30%; border-radius: 20px;">取消</a>
+                                        <a href="@Url.Action("CheckNotTogether_Button", "Home", new { checkID = item.ID })" class="btn btn-info" style="width: 30%; border-radius: 20px; background: #04c6c4">確認</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    }
+</div>
+
+
+
+
+
+@section Scripts{
+    <script>
+        function CheckOne(obj) {
+            var str = '.' + obj;
+            $(str).map(function () {
+                $(this).modal('hide');
+            });
+        }
+
+    </script>
+}
+
+

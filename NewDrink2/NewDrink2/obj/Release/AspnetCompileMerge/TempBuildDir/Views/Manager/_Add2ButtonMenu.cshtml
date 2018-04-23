@@ -1,0 +1,240 @@
+﻿@using NewDrink2.Models
+@model NewDrink2.Models.Add2_MEnuSis
+
+<div id="MyTypeChangeThis">
+    <div class="form-group col-md-5">
+        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal01">加料</button>
+        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal02">甜度</button>
+        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal03">冰度</button>
+        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal04">尺寸</button>
+    </div>
+    @using (Ajax.BeginForm("_Add2ButtonMenu2", "Manager", new AjaxOptions { HttpMethod = "Post", UpdateTargetId = "MyTypeChangeThis" }))
+    {
+        @*//加料
+            <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="myModal01">
+                <div class="modal-dialog modal-sm" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title text-center">編輯菜單加料表</h4>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table table-bordered">
+                                <tr class="active">
+                                    <td>加料表</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <p class="text-danger">@ViewBag.PriceSmall</p>
+                                        @if (Model.AddItemCreate == null || Model.AddItemCreate.Count == 0)
+                                        {
+                                            <p>沒有任何項目.</p>
+                                                <ul id="ItemType" style="list-style-type: none"></ul>
+                                        }
+                                        else
+                                        {
+                                            <ul id="ItemType" style="list-style-type: none">
+                                                @foreach (AddItemCreate items in Model.AddItemCreate)
+                                                {
+                                                    Html.RenderPartial("_ItemTypeEntry", items);
+                                                }
+                                            </ul>
+                                        }
+                                        <a id="addItem" href="#">增加一行</a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+        @*//甜度*@
+        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="myModal02">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title text-center">編輯菜單甜度</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-bordered">
+                            <tr class="active">
+                                <td>
+                                    甜度表
+                                    <div class="pull-right">
+                                        <input type="checkbox" id="checkAllSweet" />全選
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td id="SweetCheck">
+                                    @for (int i = 0; i < Model.Sweet.Count; i++)
+                                    {
+                                        @Html.HiddenFor(model => model.Sweet[i].Value)
+                                        @Html.CheckBoxFor(model => (model.Sweet[i]).Selected)
+                                        @Html.DisplayFor(model => model.Sweet[i].Text)
+                                        <br />
+                                    }
+                                    @Html.ValidationMessageFor(model => model.Sweet, "", new { @class = "text-danger" })
+                                    <hr />
+                                    @if (Model.SweetName == null || Model.SweetName.Count == 0)
+                                    {
+                                        <ul id="SweetType" style="list-style-type: none"></ul>
+                                    }
+                                    else
+                                    {
+                                        <ul id="SweetType" style="list-style-type: none">
+                                            @foreach (SweetType items in Model.SweetName)
+                                            {
+                                                Html.RenderPartial("_SweetTypeEntry", items);
+                                            }
+                                        </ul>
+                                    }
+                                    <a id="addSweet" href="#">新增甜度</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <button class="btn btn-success" id="sweetSend" type="submit">
+                                        送出
+                                    </button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+        @*//冰度*@
+        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="myModal03">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title text-center">編輯菜單冰度表</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-bordered">
+                            <tr class="active">
+                                <td>
+                                    冰度表
+                                    <div class="pull-right">
+                                        <input type="checkbox" id="checkAllIce" />全選
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td id="IceCheck">
+                                    @for (int i = 0; i < Model.IceHot.Count; i++)
+                                    {
+                                        @Html.HiddenFor(model => model.IceHot[i].Value)
+                                        @Html.CheckBoxFor(model => (model.IceHot[i]).Selected)
+                                        @Html.DisplayFor(model => model.IceHot[i].Text)
+                                        <br />
+                                    }
+                                    @Html.ValidationMessageFor(model => model.IceHot, "", new { @class = "text-danger" })
+                                    <hr />
+                                    @if (Model.IceName == null || Model.IceName.Count == 0)
+                                    {
+                                        <ul id="IceType" style="list-style-type: none"></ul>
+                                    }
+                                    else
+                                    {
+                                        <ul id="IceType" style="list-style-type: none">
+                                            @foreach (IceType items in Model.IceName)
+                                            {
+                                                Html.RenderPartial("_IceTypeEntry", items);
+                                            }
+                                        </ul>
+                                    }
+                                    <a id="addIce" href="#">新增冰度</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @*//尺寸*@
+        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="myModal04">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title text-center">編輯菜單尺寸表</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-bordered">
+                            <tr class="active">
+                                <td>
+                                    飲料尺寸表
+                                    <div class="pull-right">
+                                        <input type="checkbox" id="checkAllSize" />全選
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td id="SizeCheck">
+                                    @for (int i = 0; i < Model.Size.Count; i++)
+                                    {
+                                        @Html.HiddenFor(model => model.Size[i].Value)
+                                        @Html.CheckBoxFor(model => (model.Size[i]).Selected)
+                                        @Html.DisplayFor(model => model.Size[i].Text)
+                                        <br />
+                                    }
+                                    @Html.ValidationMessageFor(model => model.Size, "", new { @class = "text-danger" })
+                                    <hr />
+                                    @if (Model.SizeName == null || Model.SizeName.Count == 0)
+                                    {
+                                        <ul id="SizeType" style="list-style-type: none"></ul>
+                                    }
+                                    else
+                                    {
+                                        <ul id="SizeType" style="list-style-type: none">
+                                            @foreach (SizeType items in Model.SizeName)
+                                            {
+                                                Html.RenderPartial("_SizeTypeEntry", items);
+                                            }
+                                        </ul>
+                                    }
+                                    <a id="addSize" href="#">新增尺寸</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    }
+</div>
+   
+
+   
+
+@section Scripts{
+<script>
+    $('#myTypeSet').on("submit", function (event) {
+        var $this = $(this);
+        var frmValues = $this.serialize();
+        $.ajax({
+            url: '@Url.Action("_Add2ButtonMenu2", "Manager")',
+            method: 'POST',
+            data: frmValues,
+            success: function (partialResult) {
+                $("#MyTypeChangeThis").html(partialResult);
+            }
+        })
+    });
+</script>
+ 
+}
+

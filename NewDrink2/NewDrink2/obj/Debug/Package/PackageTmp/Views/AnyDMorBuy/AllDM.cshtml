@@ -1,0 +1,71 @@
+﻿@using NewDrink2.Models
+@model IEnumerable<NewDrink2.Models.Menu>
+
+@{
+    Layout = "~/Views/Shared/_AllDMPartial.cshtml";
+ }
+
+<style>
+    a {
+        text-decoration: none !important;
+    }
+
+    .BgColor {
+        border: solid 1px #e1dfdf;
+    }
+
+    .NavbarBgColor {
+        margin-top: 70px;
+    }
+
+    .crop-techniquel {
+        float: left;
+        margin: 0 10px 0.8em 0;
+        overflow: hidden;
+        border: 0 solid #e2e1e1;
+        max-width: 100%;
+        min-width: 100%;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+
+        .crop-techniquel img {
+            margin: 0px 0px 0px 0px;
+            max-width: 100%;
+            min-width: 100%;
+        }
+    .TextSizeCh {
+        font-family: 'Microsoft JhengHei', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    }
+
+    .DivShadow {
+        -moz-box-shadow: 0 4px 4px rgba(30%, 30%, 30%, 0.3);
+        -webkit-box-shadow: 0 4px 4px rgba(30%, 30%, 30%, 0.3);
+        box-shadow: 0 4px 4px rgba(30%, 30%, 30%, 0.3);
+    }
+</style>
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-sm-4 col-md-4" style=" margin-bottom: 0.5em;">
+            <a href="@Url.Action("DMDetail", "AnyDMorBuy", new { id = item.ID })">
+                <div class="BgColor DivShadow" style="border-radius: 10px;">
+                    <p class="crop-techniquel">
+                        <img src="../image/11.jpg">
+                    </p>
+                    <div class="caption TextSizeCh" style="margin: 0.2em auto 0.3em 5px;">
+                        <img src="../../image/DLogo.png" style="max-width: 50px; max-height: 50px; margin: 0.2em 0.5em auto 0.2em; line-height: 200%;" class="pull-left" />
+                        <font style="color: #494949; font-size: 16px;">
+                            @Html.DisplayFor(modelItem => item.MenuName)
+                        </font>
+                        <p style="color: #808080;">
+                            @Html.DisplayFor(modelItem => item.Addr)<br />
+                            @Html.DisplayFor(modelItem => item.MenuPhone)
+                        </p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    }
+</div>

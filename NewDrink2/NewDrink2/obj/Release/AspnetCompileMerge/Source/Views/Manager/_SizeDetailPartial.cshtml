@@ -1,0 +1,11 @@
+﻿@using NewDrink2.Models
+@model IEnumerable<NewDrink2.Models.SizeType>
+
+@foreach (var item in Model)
+{
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.SizeName)
+        </td>
+    </tr>
+}

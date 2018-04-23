@@ -1,0 +1,63 @@
+﻿@model NewDrink2.Models.UserCanDo
+
+@{ 
+    Layout = null;
+    string Ident = ViewBag.Identity;
+}
+
+    @if (Ident == "2")
+    {
+        <table class="table table-striped">
+            <tr>
+                <td colspan="4">成員使用介面</td>
+                <td><input type="checkbox" id="checkAll" onclick="$('input:checkbox').prop('checked', $(this).prop('checked'));"/>全選</td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.CheckBoxFor(model => model.BuyDrink)
+                    @Html.Label("糾團及訂購")<br />
+
+                    @Html.CheckBoxFor(model => model.OrderSet)
+                    @Html.Label("訂單管理")
+                </td>
+                <td>
+                    @Html.CheckBoxFor(model => model.Message)
+                    @Html.Label("通知訊息")
+                </td>
+                <td style="display: none;">
+                    @Html.CheckBoxFor(model => model.Callnotice)
+                    @Html.Label("催繳通知")
+                </td>
+                <td>
+                    @Html.CheckBoxFor(model => model.ChangePsd)
+                    @Html.Label("更改密碼")
+                </td>
+            </tr>
+        </table>
+        
+    }
+    @if (Ident == "1")
+    {
+        <table class="table table-striped">
+            <tr>
+                <td colspan="3">管理者使用介面</td>
+                <td><input type="checkbox" id="checkAll2" onclick="$('input:checkbox').prop('checked', $(this).prop('checked'));" />全選</td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.CheckBoxFor(model => model.MyUserSet)
+                    @Html.Label("成員管理")
+                </td>
+                <td>
+                    @Html.CheckBoxFor(model => model.MyMenuSet)
+                    @Html.Label("菜單管理")
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
+        
+    }
+
+
+

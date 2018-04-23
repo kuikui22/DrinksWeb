@@ -1,0 +1,20 @@
+﻿@using NewDrink2.Models
+@model IEnumerable<NewDrink2.Models.AddItemCreate>
+
+@foreach (var item in Model)
+{
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.ItemName)
+        </td>
+        <td>
+            $ @Html.DisplayFor(modelItem => item.LPrice)
+        </td>
+        <td>
+            $ @Html.DisplayFor(modelItem => item.MPrice)
+        </td>
+        <td>
+            $ @Html.DisplayFor(modelItem => item.SPrice)
+        </td>
+    </tr>
+}

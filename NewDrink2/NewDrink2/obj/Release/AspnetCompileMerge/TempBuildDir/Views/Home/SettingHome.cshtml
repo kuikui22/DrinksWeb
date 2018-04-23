@@ -1,0 +1,63 @@
+﻿@using NewDrink2.Models
+@{
+    Layout = "~/Views/Shared/_SettingHomeLayout.cshtml";
+    ViewBag.Title = "Home Page";
+    string Identity2 = Helper.GetUserIdentity2();
+    string[] UserLimit = ViewBag.UserLimit;
+    string UserMail = NewDrink2.Models.Helper.GetUserMail();
+    int Mess = NewDrink2.Models.HomeModels.GetHowManyMessage_UseUserEmail(UserMail);
+}
+
+<style>
+    .ListLine {        
+        border-left: solid 1px #ffffff;
+        border-right: solid 1px #ffffff;
+        border-bottom: solid 1px #808080;
+    }
+    .ListLine2 {
+        border-left: solid 1px #ffffff;
+        border-right: solid 1px #ffffff;
+    }
+    .TextSizeCh {
+        font-family: 'Microsoft JhengHei', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    }
+</style>
+
+<br /><br /><br />
+<center>
+    <img src="../image/drink3ex.jpg" />
+</center>
+<br /><br />
+<div class="col-md-12">
+    <div class="list-group">
+        @if (UserLimit[1] == "True")
+        {
+            <a class="list-group-item ListLine" href="@Url.Action("AllOrderHistoryView", "AnyDMorBuy")" style="border-top: solid 1px #ffffff;">
+                <h4 class="TextSizeCh">
+                    <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
+                    歷史訂單
+                </h4>
+            </a>
+        }
+        @if (UserLimit[2] == "True")
+        {
+            <a class="list-group-item ListLine" href="@Url.Action("MessageView_Sent", "Home")">
+                <h4 class="TextSizeCh">
+                    <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+                    歷史訊息
+                </h4>
+            </a>
+        }
+        <!--催繳訊息權限為3-->
+        @if (UserLimit[4] == "True")
+        {
+            <a class="list-group-item ListLine" href="@Url.Action("ChangePsd", "Home")" style="border-bottom: solid 1px #d0cece;">
+                <h4 class="TextSizeCh">
+                    <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                    更改密碼
+                </h4>
+            </a>
+        }
+    </div>
+</div>
+

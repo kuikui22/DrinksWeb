@@ -1,0 +1,24 @@
+﻿@using NewDrink2.Models
+@{
+    string Sid = ViewBag.IID;
+    string Sname = ViewBag.Iname;
+    string MenuID = ViewBag.MenuID.ToString();
+}
+<!--Model-->
+@using (Html.BeginForm("_MyMenuSisEditIcemodel", "Manager", FormMethod.Post))
+{
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="EditIce">
+        <div class="modal-dialog modal-sm" role="document" style="width: 400px">
+            <div class="modal-content" style="padding: 10px 0 10px 0;">
+                <center class="TextSizeCh">
+                    <font style="font-size: 18px">編輯冰度名稱</font><br />
+                    <input type="hidden" name="id" value="@Sid" />
+                    <input type="hidden" name="MenuID" value="@MenuID" />
+                    <input type="text" name="iceEdit" value="@Sname" class="form-control" />
+                    <br />
+                    <input type="submit" name="subIce" class="btn btn-success" value="送出" />
+                </center>
+            </div>
+        </div>
+    </div>
+}

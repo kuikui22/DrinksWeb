@@ -1,0 +1,101 @@
+﻿@using NewDrink2.Models
+@model NewDrink2.Models.Menu
+
+@{
+    Layout = "~/Views/Shared/_MyMenuLayoutPartial.cshtml";
+    ViewBag.Title = Model.MenuName;
+    string searchString = "";
+    if (ViewBag.SearchString != null)
+    {
+        searchString = ViewBag.SearchString;
+    }
+}
+
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+<h2>@ViewBag.Title</h2>
+@*<br />
+@using (Html.BeginForm())
+{
+    <div class="row">
+        <div class="col-lg-4" style="width: 340px;">
+            <div class="input-group">
+                @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @class = "form-control", @placeholder = "搜尋..." })
+                <span class="input-group-btn">
+                    <input class="btn btn-default" type="submit" value="搜尋">
+                </span>
+            </div><!-- /input-group -->
+        </div><!-- /.col-lg-6 -->
+    </div>
+}*@
+
+<br />
+@*@Html.ActionLink("新增飲品", "AddDrinks", new { id = Model.ID })*@
+<div style="margin-bottom: 10px;">
+    @Html.ActionLink("編輯甜度.冰度及飲料尺寸", "MyMenuSISEdit", new { MenuID = Model.ID }, new { @class = "btn btn-default" })
+    @*@Html.ActionLink("新增飲品", "Add_NewDrinks", new { id = Model.ID }, new { @class = "btn btn-default" })
+    @Html.ActionLink("新增飲品", "_Add2_NewDrinks", new { id = Model.ID })*@
+    @Html.ActionLink("新增飲品", "_Add2_NewDrinks", "TypeChangeManager", new { id = Model.ID }, null)
+
+
+</div>
+
+<div id="changeSort">
+    @{
+        Html.RenderAction("_DrinkDetailPartial", new { id = Model.ID, page = ViewBag.Page, SearchString = searchString });
+    }
+</div>
+
+<br />
+<div class="form-action no-color">
+    @Html.ActionLink("切換檢視", "MyMenuDetail", "Manager", new { id = Model.ID }, new { @class = "btn btn-primary" })
+    @Html.ActionLink("返回", "MyMenu", "Manager", routeValues: null, htmlAttributes: new { @class = "btn btn-default" })
+</div>
+
+
+<div id="SortAnyModel">
+    @{
+        Html.RenderAction("_ChangeSortAny", new { Drinkid = 0,  sort = 0, menuID = Model.ID });
+    }
+</div>
+
+
+@section Scripts{
+    <script type="text/javascript">
+        function Confirm_Form() {
+            if (!confirm("確定要刪除嗎?")) {
+                return false;
+            }
+            else {
+                if (!confirm("一旦刪除就無法復原了. \n 仍然要刪除嗎?")) {
+                    return false;
+                }
+            }
+        }
+
+        //排序
+        function Sort(num, sort, id, page, searchString) {
+            $.ajax({
+                 type: 'GET',
+                 url: '@Url.Action("_ChangeSort", "Manager")',
+                 data: { Drinkid: num, sort: sort, menuID: @Model.ID, page: page, SearchString: searchString}
+             })
+                .done(function (msg) {
+                    $('#changeSort').html(msg);
+               });
+        }
+        //任意排序到任一個地方
+        function SortAny(drinkID, nowsortid) {
+            $.ajax({
+                 type: 'GET',
+                 url: '@Url.Action("_ChangeSortAny", "Manager")',
+                 data: { Drinkid: drinkID, sort: nowsortid, menuID: @Model.ID}
+             })
+                .done(function (msg) {
+                    $('#SortAnyModel').html(msg);
+                    $('#EditSort').modal('show');
+               });
+        }
+
+    </script>
+}

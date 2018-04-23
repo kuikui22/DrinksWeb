@@ -1,0 +1,88 @@
+﻿@using NewDrink2.Models
+@{
+    string Identity1 = NewDrink2.Models.Helper.GetUserIdentity();
+    string Identity2 = NewDrink2.Models.Helper.GetUserIdentity2();
+    string UserMail = NewDrink2.Models.Helper.GetUserMail();
+    int Mess2 = NewDrink2.Models.HomeModels.GetHowManyMessage_UseUserEmail(UserMail);
+    int EndMsg = NewDrink2.Models.HomeModels.GetHowManyEndMessage_UseUserEmail(UserMail);
+    int Mess = Mess2 + EndMsg;
+    string MyUserSet = Helper.GetUserMyUserSet();
+    string MyMenuSet = Helper.GetUserMyMenuSet();
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Drinks!</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <style>
+        .BGimg{
+           background: url("@Url.Content("../image/Newback01.jpg")") center center fixed no-repeat;
+           background-size: cover;
+         }
+        a {
+            text-decoration: none !important;
+        }
+        .navSecond{
+            line-height: 50px;
+            width: 33%;
+            display: block;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar navbar navbar-fixed-top" style="background-color: #04c6c4">
+        @Html.ActionLink("Drinks!", "ManagerHome", "Home", new { area = "" }, new { @class = "navbar-brand", @style = "color: #ffffff" })
+        @Html.Partial("_LogoutPartial")
+    </div>
+    <div class="navbar navbar-fixed-top" style="margin-top: 50px; height: 54px; background-color: #ffca00;">
+        <a href="@Url.Action("ManagerHome", "Home")" class="navSecond pull-left" style=" border-bottom: solid 5px #ffffff;">
+            <img src="../../image/home2.png" />
+        </a>
+
+        @if (MyUserSet == "True")
+        {
+            <a href="@Url.Action("MyUser", "Manager")" class="navSecond pull-left">
+                <img src="../../image/user2.png" />
+            </a>
+        }
+        else
+        {
+            <span class="navSecond pull-left" style=" border-bottom: solid 5px #ffffff;">
+                <img src="../../image/user2.png" />
+            </span>
+        }
+
+        @if (MyMenuSet == "True")
+        {
+            <a href="@Url.Action("MyMenu", "Manager")" class="navSecond pull-left">
+                <img src="../../image/menu.png" />
+            </a>
+        }
+        else
+        {
+            <span class="navSecond pull-left">
+                <img src="../../image/menu.png" />
+            </span>
+        }
+        
+             
+    </div>
+    <br /><br /><br />
+    <div class="container body-content">
+        @RenderBody()
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
+
+
+

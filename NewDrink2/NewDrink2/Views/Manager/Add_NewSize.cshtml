@@ -1,0 +1,88 @@
+﻿@using NewDrink2.Models
+@model NewDrink2.Models.MenuAdd_NewSize
+@{
+    Layout = "~/Views/Shared/_Add_NewLayout.cshtml";
+    ViewBag.Title = "編輯飲料尺寸";
+}
+
+<div class="pull-left" style="max-width: 10%; left: 0;">
+    <a href="" onclick="javascript: history.go(-1); return false;">
+        <img src="../../image/xicon.png" style="max-width: 20px;" />
+    </a>
+</div>
+<br />
+<center>
+    <h2>@ViewBag.Title</h2>
+</center>
+<br />
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <p class="text-danger">@ViewBag.EmptyError</p>
+
+    <div class="col-md-12">
+        <table class="table table-bordered">
+            <tr class="active">
+                <td>
+                    飲料尺寸表
+                    <div class="pull-right">
+                        <input type="checkbox" id="checkAllSize" />全選
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td id="SizeCheck">
+                    @for (int i = 0; i < Model.Size.Count; i++)
+                    {
+                        @Html.HiddenFor(model => model.Size[i].Value)
+                        @Html.CheckBoxFor(model => (model.Size[i]).Selected)
+                        @Html.DisplayFor(model => model.Size[i].Text)
+                        <br />
+                    }
+                    @Html.ValidationMessageFor(model => model.Size, "", new { @class = "text-danger" })
+                    <hr />
+                    @if (Model.SizeName == null || Model.SizeName.Count == 0)
+                    {
+                        <ul id="SizeType" style="list-style-type: none"></ul>
+                    }
+                    else
+                    {
+                        <ul id="SizeType" style="list-style-type: none">
+                            @foreach (SizeType items in Model.SizeName)
+                            {
+                                Html.RenderPartial("_SizeTypeEntry", items);
+                            }
+                        </ul>
+                    }
+                    <a id="addSize" href="#">新增尺寸</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <br />
+    <div class="col-md-10">
+        <input type="submit" value="儲存" class="btn btn-success" />
+        @Html.ActionLink("返回", "", routeValues: null, htmlAttributes: new { @class = "btn btn-default", @onclick = "javascript: history.go(-1); return false;" })
+    </div>
+
+}
+
+
+@section Scripts {
+    <script>
+        $(function () {
+            $("#ItemType").sortable;
+            $("#addSize").click(function () {
+                $.get('/Manager/_SizeTypeEntryRow', function (template) {
+                    $("#SizeType").append(template);
+                });
+            });
+        });
+
+            $('#checkAllSize').change(function (e) {
+                $('#SizeCheck input:checkbox').prop('checked', $(this).prop("checked"));
+            });
+    </script>
+}

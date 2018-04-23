@@ -1,0 +1,149 @@
+﻿@using NewDrink2.Models
+@model IEnumerable<NewDrink2.Models.DMDrinksDetailView>
+
+@{ 
+    int MenuID = ViewBag.MenuID;
+}
+
+<style>
+    .NewBadge {
+        background-color: #acaaaa;
+        margin-right: 2px;
+        -webkit-border-radius: 30px;
+        -moz-border-radius: 30px;
+        border-radius: 30px;
+        color: #ffffff;
+    }
+    .FontType {
+        font-family: 'Microsoft JhengHei', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    }
+    .BathusClass {
+        font-size: 14px;
+        padding: 2px 20px 2px 10px;
+        color: #ffffff;
+        background-color: #ffca00;
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
+        margin-right: 0px;
+        margin-top: 0px;
+        margin-bottom: 50px;
+
+    }
+
+    .iconSize1 {
+        width: 23px;
+        height: 23px;
+        border-radius: 50%;
+        color: #ffffff;
+        background-color: #ff5e73;
+    }
+    .iconSize2 {
+        max-width: 23px;
+        max-height: 23px;
+        border-radius: 50%;
+        color: #ffffff;
+        background-color: #04c6c4;
+    }
+    .iconBiSize {
+        max-width: 150px;
+        min-width: 30px;
+        word-wrap: break-word;
+    }
+
+    .ListTableLine {
+        min-width: 50%;
+        max-width: 90%;
+        margin-right: 10%;
+        border: solid 1px #ffffff;
+        border: transparent;
+    }
+
+        .ListTableLine:hover {
+            min-width: 50%;
+            max-width: 90%;
+            margin-right: 10%;
+            border: solid 1px #f0f0f0;
+            border: transparent;
+        }
+
+</style>
+
+@if (Model == null || Model.Count() == 0)
+{
+    <br /><br /><br /><br />
+        <center>
+            <img src="../../image/noMessage.png" />
+        </center>
+        <br />
+        <p class="text-center TextSizeCh" style="color: #dcdcdc; font-size: 20px;">查無符合的品項</p>
+}
+else
+{
+    <div class="list-group">
+        @foreach (var item in Model)
+        {
+            <a href='@Url.Action("DrinkDetail", "AnyDMorBuy", new { MenuID = MenuID, DrinkID = item.DrinkID, BuyCheck = ViewBag.OrderID })' class="list-group-item">
+                <div class="pull-left" style="line-height: 50px; margin-right: 10px;">
+                    <img src="../../image/drink4.png" />&nbsp;
+                </div>
+                @if (!String.IsNullOrEmpty(item.Bathus))
+                {
+                    <div class="pull-right BathusClass FontType" style="position: absolute; right: 0px;">
+                        <font>
+                            @Html.DisplayFor(model => item.Bathus)
+                        </font>
+                    </div>
+                }
+                <div class="ListTableLine">
+                    <font class="FontType" style="font-size: 20px;">
+                        @Html.DisplayFor(model => item.DrinkName, new { @style = "font-size: 20px;" })
+                    </font>
+
+                    <table style=" margin-left: 70px;">
+                        <tr>
+                            @foreach (var itemP in item.DMDrinksPriceSize)
+                            {
+                                if (itemP.HotOrIce == 1)
+                                {
+                                    <td class="iconBiSize">
+                                        <div class="text-center iconSize1">
+                                            <font class="FontType text-center" style=" font-size: 16px;">
+                                                @Html.DisplayFor(modelItem => itemP.SimpleName)
+                                            </font>
+                                        </div>
+                                    </td>
+                                    <td class="iconBiSize">
+                                        <div>
+                                            <font class="FontType" style="color: #808080; font-size: 16px;">
+                                                @Html.DisplayFor(modelItem => itemP.DrinkPrice)
+                                            </font>
+                                        </div>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td class="iconBiSize">
+                                        <div class="text-center iconSize2">
+                                            <font class="FontType text-center" style=" font-size: 16px;">
+                                                @Html.DisplayFor(modelItem => itemP.SimpleName)
+                                            </font>
+                                        </div>
+                                    </td>
+                                    <td class="iconBiSize">
+                                        <div>
+                                            <font class="FontType" style="color: #808080; font-size: 16px;">
+                                                @Html.DisplayFor(modelItem => itemP.DrinkPrice)
+                                            </font>
+                                        </div>
+                                    </td>
+                                }
+                            }
+                        </tr>
+                    </table>
+                </div>
+            </a>
+        }
+    </div>
+}
+
+

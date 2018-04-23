@@ -1,0 +1,32 @@
+﻿@using NewDrink2.Models
+@{
+    string Identity1 = NewDrink2.Models.Helper.GetUserIdentity();
+    string Identity2 = NewDrink2.Models.Helper.GetUserIdentity2();
+    string UserMail = NewDrink2.Models.Helper.GetUserMail();
+    int Mess2 = NewDrink2.Models.HomeModels.GetHowManyMessage_UseUserEmail(UserMail);
+    int EndMsg = NewDrink2.Models.HomeModels.GetHowManyEndMessage_UseUserEmail(UserMail);
+    int Mess = Mess2 + EndMsg;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Drinks!</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+</head>
+<body>
+    
+    <div class="container body-content">
+        @RenderBody()
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
+

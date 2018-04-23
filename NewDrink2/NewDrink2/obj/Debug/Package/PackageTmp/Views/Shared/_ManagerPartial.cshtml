@@ -1,0 +1,24 @@
+﻿@using NewDrink2.Models
+@{
+    string MyUserSet = Helper.GetUserMyUserSet();
+    string MyMenuSet = Helper.GetUserMyMenuSet();
+}
+
+@if (MyUserSet == "True")
+{
+    <a class="list-group-item ListLine" href="@Url.Action("MyUser", "Manager")">
+        <h4 class="TextSizeCh">
+            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+            管理使用者           
+        </h4>
+    </a>
+}
+@if (MyMenuSet == "True")
+{
+    <a class="list-group-item ListLine2" href="@Url.Action("MyMenu", "Manager")">
+        <h4 class="TextSizeCh">
+            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+            管裡菜單            
+        </h4>
+    </a>
+}

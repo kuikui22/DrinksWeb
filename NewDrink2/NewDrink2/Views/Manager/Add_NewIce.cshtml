@@ -1,0 +1,88 @@
+﻿@using NewDrink2.Models
+@model NewDrink2.Models.MenuAdd_NewIce
+@{
+    Layout = "~/Views/Shared/_Add_NewLayout.cshtml";
+    ViewBag.Title = "編輯冰度";
+}
+<div class="pull-left" style="max-width: 10%; left: 0;">
+    <a href="" onclick="javascript: history.go(-1); return false;">
+        <img src="../../image/xicon.png" style="max-width: 20px;" />
+    </a>
+</div>
+<br />
+<center>
+    <h2>@ViewBag.Title</h2>
+</center>
+<br />
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <p class="text-danger">@ViewBag.EmptyError</p>
+
+    <div class="col-md-12">        
+        <table class="table table-bordered">
+            <tr class="active">
+                <td>
+                    冰度表
+                    <div class="pull-right">
+                        <input type="checkbox" id="checkAllIce" />全選
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td id="IceCheck">
+                    @for (int i = 0; i < Model.IceHot.Count; i++)
+                    {
+                        @Html.HiddenFor(model => model.IceHot[i].Value)
+                        @Html.CheckBoxFor(model => (model.IceHot[i]).Selected)
+                        @Html.DisplayFor(model => model.IceHot[i].Text)
+                        <br />
+                    }
+                    @Html.ValidationMessageFor(model => model.IceHot, "", new { @class = "text-danger" })
+                    <hr />
+                    @if (Model.IceName == null || Model.IceName.Count == 0)
+                    {
+                        <ul id="IceType" style="list-style-type: none"></ul>
+                    }
+                    else
+                    {
+                        <ul id="IceType" style="list-style-type: none">
+                            @foreach (IceType items in Model.IceName)
+                            {
+                                Html.RenderPartial("_IceTypeEntry", items);
+                            }
+                        </ul>
+                    }
+                    <a id="addIce" href="#">新增冰度</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <br />
+
+    <div class="col-md-10">
+        <input type="submit" value="儲存" class="btn btn-success" />
+        @Html.ActionLink("返回", "", routeValues: null, htmlAttributes: new { @class = "btn btn-default", @onclick = "javascript: history.go(-1); return false;" })
+    </div>
+
+}
+
+
+@section Scripts {
+    <script>
+        $(function () {
+            $("#ItemType").sortable;
+            $("#addIce").click(function () {
+                $.get('/Manager/_IceTypeEntryRow', function (template) {
+                    $("#IceType").append(template);
+                });
+            });
+        });
+
+            $('#checkAllIce').change(function (e) {
+                $('#IceCheck input:checkbox').prop('checked', $(this).prop("checked"));
+            });
+    </script>
+}

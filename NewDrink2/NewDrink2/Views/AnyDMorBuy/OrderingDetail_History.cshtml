@@ -1,0 +1,138 @@
+﻿@using NewDrink2.Models
+@model NewDrink2.Models.OrderingDetailView
+
+@{
+    Layout = "~/Views/Shared/_OrderDetailHistoryPartial.cshtml";
+}
+<style>
+    a {
+        text-decoration: none !important;
+    }
+
+    .bottomStyleR {
+        width: 90%;
+        height: 48px;
+        display: block;
+        line-height: 48px;
+        text-align: center;
+        background-color: #e4566c;
+        color: #ffffff;
+    }
+
+    .bottomStyleL {
+        width: 10%;
+        height: 48px;
+        display: block;
+        line-height: 48px;
+        text-align: center;
+        background-color: #fbca29;
+    }
+
+    .NavbarBgColor {
+        margin-top: 50px;
+    }
+    .BadgeNew {
+        font-size: 18px;
+        color: #ffffff;
+        max-height: 30px;
+        text-align: center;
+        line-height: 30px;
+        padding: 0 20px 0 10px;
+        border-top-left-radius: 30px;
+        border-bottom-left-radius: 30px;
+        margin-top: 15px;
+    }
+    .TopStyle {
+        width: 50%;
+        height: 48px;
+        display: block;
+        line-height: 48px;
+        text-align: center;
+    }
+
+    .listsline {
+        border-bottom: solid 1px #c1bdbd;
+    }
+
+    .TextSizeCh {
+        font-family: 'Microsoft JhengHei', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    }
+</style>
+<nav class="navbar navbar-fixed-top NavbarBgColor" style="border-bottom: solid 2px #c1bdbd">
+    <a href="#" style="color: #04c6c4">
+        <div class="pull-left TopStyle" style="border-bottom: solid 4px #04c6c4">
+            <font size="3" class="TextSizeCh">品項清單</font>
+        </div>
+    </a>
+    <a href="@Url.Action("OrderingMemDetail_History", "AnyDMorBuy", new { OrderID = ViewBag.OrderID })" style="color: #04c6c4">
+        <div class="pull-right TopStyle">
+            <font size="3" class="TextSizeCh">團員名單</font>
+        </div>
+    </a>
+</nav>
+
+<div style="margin-top: 50px;">
+    @if (Model.OrderingDetailView_Detail.Count == 0 || Model.OrderingDetailView_Detail == null)
+    {
+        <br /><br /><br />
+        <center>
+            <img src="../image/noMessage.png" />
+        </center>
+        <br />
+        <p class="text-center TextSizeCh" style="color: #dcdcdc; font-size: 20px;">
+            尚無加入任何飲品.
+        </p>
+    }
+    else
+    {
+        <div class="panel panel-default">
+            @foreach (var item in Model.OrderingDetailView_Detail)
+            {
+                <div class="panel-body listsline" style="font-size: 18px; border-bottom: solid 3px #73d7d6">
+                    <div class="pull-left" style="min-width: 65%;">
+                        <div class="pull-left" style="line-height: 60px; margin-right: 10px;">
+                            <img src="../image/drink3ex2.png" />
+                        </div>
+                        <font style="color: #04c6c4">
+                            @Html.DisplayFor(modelItem => item.UserName)
+                        </font><br />
+                        <font style="color: #04c6c4">
+                            @Html.DisplayFor(modelItem => item.DrinkName, new { @style = "white-space: nowrap;" })
+                        </font><br />
+                        <small style="color: #9d9c9c">
+                            @Html.DisplayFor(modelItem => item.DrinkSize) .
+                            @Html.DisplayFor(modelItem => item.DrinkIce) .
+                            @Html.DisplayFor(modelItem => item.DrinkSweet) .
+                            @Html.DisplayFor(modelItem => item.DrinkAdditem)
+                        </small>
+                    </div>
+                    <div class="pull-right TextSizeCh" style="line-height: 60px;">
+                        <font style="color: #e75568; position: absolute; right: 70px;">$@Html.DisplayFor(modelItem => item.SCount)</font>
+                        <span class="BadgeNew" style="background-color: #04c6c4; position: absolute; right: 0;"> x @Html.DisplayFor(modelItem => item.SQuantity) </span>                        
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<nav class="navbar navbar-default navbar-fixed-bottom bottomTotNav">
+    <div>
+        <div class="pull-left">
+            <font size="3" style="line-height: 50px; margin-left: 20px; color: #e75568" class="TextSizeCh"">總計</font>
+        </div>
+        <div class="pull-right">
+            <font size="3" style="line-height: 50px; margin-right: 20px; color: #e75568" class="TextSizeCh"">
+                @Html.DisplayFor(model => Model.AllQuantity) 杯/$
+                @Html.DisplayFor(model => Model.AllCount)
+            </font>
+        </div>
+    </div>
+</nav>
+
+
+
+
+
+
+

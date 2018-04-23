@@ -1,0 +1,169 @@
+﻿@using NewDrink2.Models
+@model NewDrink2.Models.OrderingDetailView
+
+@{
+    Layout = "~/Views/Shared/_OrderDetailHistoryPartial.cshtml";
+}
+<style>
+    a {
+        text-decoration: none !important;
+    }
+
+    .bottomStyleR {
+        width: 90%;
+        height: 48px;
+        display: block;
+        line-height: 48px;
+        text-align: center;
+        background-color: #e4566c;
+        color: #ffffff;
+    }
+
+    .bottomStyleL {
+        width: 10%;
+        height: 48px;
+        display: block;
+        line-height: 48px;
+        text-align: center;
+        background-color: #fbca29;
+    }
+    .BadgeNew {
+        font-size: 18px;
+        color: #ffffff;
+        max-height: 30px;
+        text-align: center;
+        line-height: 30px;
+        padding: 0 20px 0 10px;
+        border-top-left-radius: 30px;
+        border-bottom-left-radius: 30px;
+        margin-top: 10px;
+    }
+    .BadgeNew2 {
+        font-size: 17px;
+        color: #a8a8a8;
+    }
+    .NavbarBgColor {
+        margin-top: 50px;
+    }
+
+    .TopStyle {
+        width: 50%;
+        height: 48px;
+        display: block;
+        line-height: 48px;
+        text-align: center;
+    }
+    .TextSizeCh {
+        font-family: 'Microsoft JhengHei', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    }
+</style>
+<nav class="navbar navbar-fixed-top NavbarBgColor" style="border-bottom: solid 2px #c1bdbd">
+    <a href="@Url.Action("OrderingDetail_History", "AnyDMorBuy", new { OrderID = ViewBag.OrderID })" style="color: #04c6c4">
+        <div class="pull-left TopStyle">
+            <font size="3" class="TextSizeCh">品項清單</font>
+        </div>
+    </a>
+    <a href="#" style="color: #04c6c4">
+        <div class="pull-right TopStyle" style="border-bottom: solid 4px #04c6c4">
+            <font size="3" class="TextSizeCh">團員名單</font>
+        </div>
+    </a>
+</nav>
+
+<div style="margin-top: 50px;">
+    @if ((Model.OrderingDetailView_Detail.Count == 0 || Model.OrderingDetailView_Detail == null) && ViewBag.HaveMem == 0)
+    {
+        <br /><br /><br />
+        <center>
+            <img src="../image/noMessage.png" />
+        </center>
+        <br />
+        <p class="text-center TextSizeCh" style="color: #dcdcdc; font-size: 20px;">
+            尚無任何成員.
+        </p>
+    }
+    else
+    {
+        var myMem = Model.OrderingDetailView_Detail.ToLookup(c => c.UserID);
+        foreach (var item in myMem)
+        {
+            var Tot = 0;
+            var Qu = 0;
+            var name = "";
+            foreach (var Itemitem in item)
+            {
+                Tot = Tot + Itemitem.SCount;
+                Qu = Qu + Itemitem.SQuantity;
+                name = Itemitem.UserName;
+                name = name.Trim();
+            }
+
+            <div class="panel-group" id="@item.Key" role="tablist" aria-expanded="false">
+                <div class="panel">
+                    <a role="button" data-toggle="collapse" data-parent="#nofriend" href='#@name' aria-expanded="true" aria-controls="collapseOne">
+                        <div class="panel-heading" role="tab" id="headingOne" style="background-color: #ffffff; border-bottom: solid 3px #73d7d6">
+                            <h3 class="panel-title TextSizeCh">
+                                <img src="../image/user3.png" style="margin-right: 5px;" />
+                                @foreach (var Itemitem in item)
+                                {
+                                    <font style="color: #04c6c4; font-size: 18px;">@Itemitem.UserName</font>
+                                    break;
+                                }
+                                <font size="4" class="pull-right" style="color: #ff5e73; line-height: 50px; margin-right: 65px;">
+                                    $@Tot                                   
+                                </font>
+                                <span class="BadgeNew" style="background-color: #04c6c4; position: absolute; right: 0;">X @Qu</span>
+                            </h3>
+                        </div>
+                    </a>
+                    <div id="@name" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                        @foreach (var Itemitem in item)
+                        {
+                            <div class="list-group-item" style="font-size: 18px; background-color: #f8f8f8">
+                                <div style="max-width: 75%;">
+                                    <span class="pull-left" style="line-height: 55px;">
+                                        <img src="../image/drink4.png" style="margin-right: 5px; width: 50px;" />
+                                    </span>
+                                    <font style="color: #04c6c4">@Itemitem.DrinkName</font><br />
+                                    <small style="color: #9d9c9c" class="TextSizeCh">
+                                        @Itemitem.DrinkSize .
+                                        @Itemitem.DrinkIce .
+                                        @Itemitem.DrinkSweet .
+                                        @Itemitem.DrinkAdditem
+                                    </small>
+                                </div>
+                                <div class="pull-right TextSizeCh" style="color: #ff5e73; position: absolute; top: 15px; right: 5px;">
+                                    <font style="position: absolute; right: 73px;">$@Itemitem.SCount</font>                                    
+                                    <span class="BadgeNew2" style="position: absolute; right: 12px; min-width: 30px; max-width: 50px;"> x @Itemitem.SQuantity</span>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>
+@{
+    Html.RenderAction("OrderingMemResponse", "AnyDMorBuy", new { OrderID = Model.OrderID });
+}
+
+<nav class="navbar navbar-default navbar-fixed-bottom bottomTotNav">
+    <div>
+        <div class="pull-left">
+            <font size="3" style="line-height: 50px; margin-left: 20px; color: #e75568" class="TextSizeCh">總計</font>
+        </div>
+        <div class="pull-right">
+            <font size="3" style="line-height: 50px; margin-right: 20px; color: #e75568" class="TextSizeCh">
+                @Html.DisplayFor(model => Model.AllQuantity) 杯/$
+                @Html.DisplayFor(model => Model.AllCount)
+            </font>
+        </div>
+    </div>
+</nav>
+
+
+
+
+
+

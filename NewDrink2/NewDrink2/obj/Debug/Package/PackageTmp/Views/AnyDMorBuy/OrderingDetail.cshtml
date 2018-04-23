@@ -1,0 +1,224 @@
+﻿@using NewDrink2.Models
+@model NewDrink2.Models.OrderingDetailView
+
+@{ 
+    Layout = "~/Views/Shared/_OrderDetailPartial.cshtml";
+    var UserMail = Helper.GetUserMail();
+    int UserID = AnyDMorBuy.GetUserID_UseEmail(UserMail);
+    int LeaderID = AnyDMorBuy.GetLeaderID_UseOrderID(ViewBag.OrderID);
+}
+<style>
+    a {
+        text-decoration: none !important;
+    }
+    .bottomStyleR {
+        width: 90%;
+        height: 48px;
+        display: block;
+        line-height: 48px;
+        text-align: center;
+        background-color: #e4566c;
+        color: #ffffff;
+    }
+    .bottomStyleL {
+        width: 10%;
+        height: 48px;
+        display: block;
+        line-height: 48px;
+        text-align: center;
+        background-color: #fbca29;
+    }
+    .NavbarBgColor {
+        margin-top: 50px;
+        background-color: #ffffff;
+    }
+    .TopStyle {
+        width: 50%;
+        height: 48px;
+        display: block;
+        line-height: 48px;
+        text-align: center;
+    }
+    .bottomTotNav {
+        margin-bottom: 50px;
+    }
+    .listsline {
+        border-bottom: solid 1px #c1bdbd;
+    }
+    .TextSizeCh {
+        font-family: 'Microsoft JhengHei', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    }
+</style>
+<nav class="navbar navbar-fixed-top NavbarBgColor" style="border-bottom: solid 1px #c1bdbd">
+    <a href="#" style="color: #04c6c4">
+        <div class="pull-left TopStyle" style="border-bottom: solid 4px #04c6c4">
+            <font size="3" class="TextSizeCh">品項清單</font>
+        </div>
+    </a>
+    <a href="@Url.Action("OrderingMemDetail", "AnyDMorBuy", new { OrderID = ViewBag.OrderID })" style="color: #04c6c4">
+        <div class="pull-right TopStyle">
+            <font size="3" class="TextSizeCh">團員名單</font>
+        </div>
+    </a>
+</nav>
+
+<div style="margin-top: 50px;">
+    @if (Model.OrderingDetailView_Detail.Count == 0 || Model.OrderingDetailView_Detail == null)
+    {
+        <br />
+        <p class="text-center TextSizeCh" style="color: #04c6c4">
+            目前尚無加入任何飲品.
+        </p>
+    }
+    else
+    {
+        <div class="panel panel-default">
+            @foreach (var item in Model.OrderingDetailView_Detail)
+            {
+                <div class="panel-body listsline" style="font-size: 18px; border-bottom: solid 3px #73d7d6">
+                    <div class="pull-left TextSizeCh" style="min-width: 65%;">
+                        <div class="pull-left" style="line-height: 60px; margin-right: 10px;">
+                            <img src="../image/drink3ex2.png" />
+                        </div>
+                        <font style="color: #04c6c4">
+                            @Html.DisplayFor(modelItem => item.UserName)
+                        </font><br />
+                        <font style="color: #04c6c4">
+                            @Html.DisplayFor(modelItem => item.DrinkName, new { @style = "white-space: nowrap;" })
+                        </font><br />
+                        <small style="color: #9d9c9c">
+                            @Html.DisplayFor(modelItem => item.DrinkSize) .
+                            @Html.DisplayFor(modelItem => item.DrinkIce) .
+                            @Html.DisplayFor(modelItem => item.DrinkSweet) .
+                            @Html.DisplayFor(modelItem => item.DrinkAdditem)
+                        </small>
+                    </div>
+                    <div class="pull-right TextSizeCh" style="line-height: 60px;">
+                        <font style="color: #e75568">$@Html.DisplayFor(modelItem => item.SCount)</font>
+                        <span class="badge" style="background-color: #04c6c4;"> x @Html.DisplayFor(modelItem => item.SQuantity) </span>
+                        @if (UserID == item.UserID)
+                        {
+                            <div class="pull-right" style="line-height: 60px; margin-right: 10px; margin-left: 10px;">
+                                <a data-toggle="modal" onclick="MySelfMem(@item.DetailID);" style="cursor: pointer;">
+                                    <img src="../image/paingi.jpg" alt="修改/刪除" />
+                                </a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+<br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+
+
+<nav class="navbar navbar-default navbar-fixed-bottom bottomTotNav" style="margin-bottom: 50px;">
+    <div>
+        <div class="pull-left">
+            <font size="3" style="line-height: 50px; margin-left: 20px; color: #e75568" class="TextSizeCh">總計</font>
+        </div>
+        <div class="pull-right">
+            <font size="3" style="line-height: 50px; margin-right: 20px; color: #e75568" class="TextSizeCh">
+                @Html.DisplayFor(model => Model.AllQuantity) 杯/$ 
+                @Html.DisplayFor(model => Model.AllCount)
+            </font>
+        </div>        
+    </div>
+</nav>
+<nav class="navbar navbar-default navbar-fixed-bottom">
+    <a href="#" data-toggle="modal" data-target=".bs-example-modal-sm">
+        <div class="pull-left bottomStyleL">
+            <font size="6" class="TextSizeCh" style="color: #e4566c"> ＋ </font>
+        </div>
+    </a>
+    @if (LeaderID == UserID)
+    {
+        <a href="@Url.Action("OverTheOrder", "AnyDMorBuy", new { OrderID = Model.OrderID })" onclick="return CheckeEnd()">
+            <div class="pull-right bottomStyleR">
+                <font size="4" class="TextSizeCh">結束訂購</font>
+            </div>
+        </a>
+    }
+    else
+    {
+        <div class="pull-right bottomStyleR">
+            <font size="4" class="TextSizeCh">結束訂購</font>
+        </div>
+    }
+</nav>
+
+
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title text-center">選單</h4>
+            </div>
+            <div class="modal-body">
+                <p class="text-center TextSizeCh">
+                    <a href="@Url.Action("BackMenuDetail_Buy", "AnyDMorBuy", new { BuyCheck = Model.OrderID })" class="btn btn-primary" style="width: 60%;">加點飲料</a>
+                </p>
+                @if (LeaderID == UserID)
+                {
+                    <p class="text-center TextSizeCh">
+                        <a href="@Url.Action("SendMyMessage", "AnyDMorBuy", new { BuyCheck = Model.OrderID })" class="btn btn-success" style="width: 60%;">揪團/發送訊息</a>
+                    </p>
+                }
+                @if (LeaderID == UserID)
+                {
+                    <p class="text-center TextSizeCh">
+                        <a href="@Url.Action("MenuDetail_ToHistory", "AnyDMorBuy", new { BuyCheck = Model.OrderID })" class="btn btn-info" style="width: 60%;" onclick="return CheckOne()">取消訂單</a>
+                    </p>
+                }             
+            </div>            
+        </div>
+    </div>
+</div>
+
+<div id="BigSelfMem">
+   @{
+       Html.RenderAction("_EditOrDeletePartial", new { DetailID = 0 });
+    }
+</div>
+
+
+@section Scripts{
+    <script>
+        function MySelfMem(id) {
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("_EditOrDeletePartial", "AnyDMorBuy")',
+                data: { DetailID: id }
+            })
+                .done(function (msg) {
+                    $('#BigSelfMem').html(msg);
+                    $('.bs-example-modal-sm2').modal('show');
+                });
+        }       
+        function CheckOne() {
+            if (!confirm("確定要取消訂單嗎?")) {
+                return false;
+            }
+            else {
+                if (!confirm("一旦取消就無法復原了. \n 仍然要取消嗎?")) {
+                    return false;
+                }
+            }
+        }
+        function CheckeEnd() {
+            if (!confirm("確定要結束訂購嗎?")) {
+                return false;
+            }
+            else {
+                if (!confirm("一旦結束就無法再編輯此訂單了. \n 仍然要結束嗎?")) {
+                    return false;
+                }
+            }
+        }
+    </script>
+}
+
+
+
+

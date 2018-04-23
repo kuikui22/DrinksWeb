@@ -1,0 +1,96 @@
+﻿@using NewDrink2.Models
+@model IEnumerable<NewDrink2.Models.Menu>
+
+@{
+    Layout = "~/Views/Shared/_AllDMPartial.cshtml";    
+ }
+
+<style>
+    a {
+        text-decoration: none !important;
+    }
+
+    .BgColor {
+        border: solid 1px #e1dfdf;
+    }
+
+    .NavbarBgColor {
+        margin-top: 70px;
+    }
+
+    .crop-techniquel {
+        float: left;
+        margin: 0 10px 0.8em 0;
+        overflow: hidden;
+        border: 0 solid #e2e1e1;
+        width: 100%;        
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+
+        .crop-techniquel img {
+            margin: 0px 0px 0px 0px;
+            width: 100%;
+        }
+    .TextSizeCh {
+        font-family: 'Microsoft JhengHei', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    }
+
+    .DivShadow {
+        -moz-box-shadow: 0 3px 4px rgba(40%, 40%, 40%, 0.3);
+        -webkit-box-shadow: 0 3px 4px rgba(40%, 40%, 40%, 0.3);
+        box-shadow: 0 3px 4px rgba(40%, 40%, 40%, 0.3);
+    }
+    .item {
+        width: 100%;
+        margin: 0px auto;
+        overflow: hidden;
+        height: 280px;
+        padding-bottom: 60%;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+        .item img {
+            width: 100%;
+            height: 280px;
+        }
+
+</style>
+
+<div class="row">
+    @if (Model == null || Model.Count() == 0)
+    {
+        <br /><br /><br /><br />
+        <center>
+            <img src="../image/noMessage.png" />
+        </center>
+        <br />
+        <p class="text-center TextSizeCh" style="color: #dcdcdc; font-size: 20px;">尚無符合的店家清單</p>
+    }
+    else
+    {
+        foreach (var item in Model)
+        {
+            <div class="col-sm-4 col-md-4" style=" margin-bottom: 0.8em;">
+                <a href="@Url.Action("DMDetail", "AnyDMorBuy", new { id = item.ID })">
+                    <div class="BgColor DivShadow" style="border-radius: 10px; margin: 5px auto 5px auto">
+                        <div class="item">
+                            <img src="../MenuImage/@item.ImageName" class="img-responsive" style="height: 280px;">
+                        </div>
+                        <div class="caption TextSizeCh" style="margin: 0.2em auto 0.3em 5px;">
+                            <img src="../../image/LogoB.png" style="margin: 0.2em 0.5em auto 0.2em; line-height: 300%;" class="pull-left" />
+                            <font style="color: #494949; font-size: 16px;">
+                                @Html.DisplayFor(modelItem => item.MenuName)
+                            </font>
+                            <p style="color: #808080;">
+                                @Html.DisplayFor(modelItem => item.Addr)<br />
+                                @Html.DisplayFor(modelItem => item.MenuPhone)
+                            </p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        }
+    }
+
+</div>

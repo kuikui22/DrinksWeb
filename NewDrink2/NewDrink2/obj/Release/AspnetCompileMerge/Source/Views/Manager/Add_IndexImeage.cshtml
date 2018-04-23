@@ -1,0 +1,152 @@
+﻿@using NewDrink2.Models
+@model NewDrink2.Models.IndexImage
+@{
+    Layout = "~/Views/Shared/_MyMenuLayoutPartial.cshtml";
+    ViewBag.Title = "修改首頁圖片";
+}
+
+<style>
+    .monkeyb-cust-file {
+        overflow: hidden;
+        position: relative;
+        display: inline-block;
+        background-color: #04c6c4;
+        color: #fff;
+        text-align: center;
+        -web-border-radius: 10px;
+        -moz-border-radius: 10px;
+        border-radius: 10px;
+        padding: 5px 10px;
+        font-size: 16px;
+        font-family: Arial,Microsoft JhengHei;
+        margin-top: 5px;
+    }
+
+        .monkeyb-cust-file:hover {
+            background-color: #068b8a;
+            cursor: pointer;
+        }
+
+        .monkeyb-cust-file input {
+            position: absolute;
+            opacity: 0;
+            filter: alpha(opacity=0);
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+        }
+</style>
+
+
+<h2>@ViewBag.Title</h2>
+<small style="color: #808080;">※建議上傳圖片的最佳大小為:1100 x 468 像素</small>
+<br /><br />
+@using (Html.BeginForm("Add_IndexImeage", "Manager", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+{
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(m => m.ID)
+    <p class="text-danger">@ViewBag.Message</p>
+
+    <div class="form-group col-md-12">
+        <img id="seeImage" src="../../IndexImage/@Model.Index01" style="max-width: 600px;" />
+        <br />
+        <div class="monkeyb-cust-file">
+            <img src="../../image/upload.png" />
+            <span>選擇圖片</span>
+            <input type="file" id="imageMenu" name="file" />
+        </div>
+    </div>
+
+    <div class="form-group col-md-12">
+        <img id="seeImage2" src="../../IndexImage/@Model.Index02" style="max-width: 600px;" />
+        <br />
+        <div class="monkeyb-cust-file">
+            <img src="../../image/upload.png" />
+            <span>選擇圖片</span>
+            <input type="file" id="imageMenu2" name="file2" />
+        </div>
+    </div>
+
+    <div class="form-group col-md-12">
+        <img id="seeImage3" src="../../IndexImage/@Model.Index03" style="max-width: 600px;" />
+        <br />
+        <div class="monkeyb-cust-file">
+            <img src="../../image/upload.png" />
+            <span>選擇圖片</span>
+            <input type="file" id="imageMenu3" name="file3" />
+        </div>
+    </div>
+
+    <br />
+
+    <input type="submit" value="儲存" class="btn btn-success" />
+    @Html.ActionLink("返回", "", routeValues: null, htmlAttributes: new { @class = "btn btn-default", @onclick = "javascript: history.go(-1); return false;" })
+
+
+}
+
+@section Scripts{
+    <script>
+        $(function () {
+            function format_float(num, pos)
+            {
+                var size = Math.pow(10, pos);
+                return Math.round(num * size) / size;
+            }
+
+            function preview(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#seeImage').attr('src', e.target.result);
+                        var KB = format_float(e.total / 1024, 2);
+                        $('.size').text("檔案大小:" + KB + "KB");
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                }                
+            }
+
+            function preview2(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#seeImage2').attr('src', e.target.result);
+                        var KB = format_float(e.total / 1024, 2);
+                        $('.size').text("檔案大小:" + KB + "KB");
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            function preview3(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#seeImage3').attr('src', e.target.result);
+                        var KB = format_float(e.total / 1024, 2);
+                        $('.size').text("檔案大小:" + KB + "KB");
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            //$("body").on("change", "#imageMenu", function () {
+            //    preview(this);
+            //})
+            $("#imageMenu").on("change", function () {
+                preview(this);
+            })
+            $("#imageMenu2").on("change", function () {
+                preview2(this);
+            })
+            $("#imageMenu3").on("change", function () {
+                preview3(this);
+            })
+            
+        })
+    </script>
+}

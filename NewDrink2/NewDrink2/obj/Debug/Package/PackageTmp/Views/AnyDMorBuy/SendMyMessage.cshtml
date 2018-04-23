@@ -1,0 +1,103 @@
+﻿@using NewDrink2.Models
+@model NewDrink2.Models.EmailModelView
+@{   
+    Layout = "~/Views/Shared/_EmailSendPartial.cshtml";
+    string Name = Helper.GetUserName();
+    int DeatilID = ViewBag.DetailID;
+}
+         
+<style>
+    .TextSizeCh {
+        font-family: 'Microsoft JhengHei', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    }
+    .LoadingClass {
+        height: 100%;
+        width: 100%;
+        position: fixed;
+        padding: 0;
+        margin: 0;
+        top: 0;
+        left: 0;
+        background: rgba(40, 40, 40, 0.9);
+        font-size: 16px;
+        color: #5cb85c; 
+        z-index: 999999;
+    }
+</style>
+
+<br /><br /><br />
+<div id="main">
+    @using (Html.BeginForm("SendMyMessage", "AnyDMorBuy", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.OrderID, new { @Value = DeatilID })
+        <p class="text-center">
+            <table border="0" cellpadding="0" cellspacing="0" align="center">
+                <tr>
+                    <td width="50px" style="vertical-align: text-top;">
+                        @Html.LabelFor(model => model.Subject, new { @class = "TextSizeCh" })
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(model => model.Subject, new { @class = "form-control TextSizeCh" })
+                        @Html.ValidationMessageFor(model => model.Subject, "", new { @class = "text-danger TextSizeCh" })
+                        <br />
+                    </td>
+                </tr>
+                <tr>
+                    <td width="50px" style="vertical-align: text-top;">
+                        @Html.LabelFor(model => model.Body, new { @class = "TextSizeCh" })
+                    </td>
+                    <td>
+                        <textarea name="Body" id="Body" class="form-control TextSizeCh" style="height: 100px; width: 600px; resize: none;">@Name 邀請您一起團購飲料!</textarea>
+                        @Html.ValidationMessageFor(model => model.Body, "", new { @class = "text-danger TextSizeCh" })
+                        <br />
+                    </td>
+                </tr>
+                <tr>
+                    <td width="50px" style="vertical-align: text-top;">
+                        @Html.LabelFor(model => model.Member, new { @class = "TextSizeCh" })
+                    </td>
+                    <td style="border: solid 1px #cccccc; border-radius: 5px; padding: 4px 2px 4px 2px">
+                        <div style="max-width: 275px;">
+                            <div class="col-sm-8 TextSizeCh">
+                                <input type="checkbox" name="AllCheck" id="AllCheck" />
+                                <font class="TextSizeCh">全選</font>
+                            </div>
+                            <div id="AllMem">
+                                @{
+                                    Html.RenderAction("_ChangeSendMemberPartial");
+                                }
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </p>
+        <hr />
+        <p class="text-center">
+            <input id="submit" type="submit" class="btn btn-success TextSizeCh" style="width: 30%;" value="送出揪團訊息" onclick="Loading()" />
+        </p>
+    }         
+</div>
+<div id="loading" style="display: none;" class="TextSizeCh text-center LoadingClass">
+    <img src="../image/loading.gif" style="max-width: 50px; margin: 12em auto auto auto" /><br /><br />
+    郵件寄送中.請稍候...
+</div>                          
+        
+
+@section Scripts{
+    <script>
+
+        $('#AllCheck').change(function (e) {
+            $('#AllMem input:checkbox').prop('checked', $(this).prop("checked"));
+        });
+
+        function Loading()
+        {
+            $('#main').css('display', 'none');
+            $('#submit').css('disable', true);
+            $('#loading').fadeIn();
+        }
+
+    </script>
+}

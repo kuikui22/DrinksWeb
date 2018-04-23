@@ -1,0 +1,92 @@
+﻿@using NewDrink2.Models
+@{
+    Layout = "~/Views/Shared/_HomeIndexLayout.cshtml";
+    ViewBag.Title = "Home Page";
+    string Identity2 = Helper.GetUserIdentity2();
+    string[] UserLimit = ViewBag.UserLimit;
+    string UserMail = NewDrink2.Models.Helper.GetUserMail();
+    int Mess = NewDrink2.Models.HomeModels.GetHowManyMessage_UseUserEmail(UserMail);
+}
+
+<style>
+    #jum_back {
+        background: url("@Url.Content("~/image/06.jpg")") no-repeat;
+        background-size: cover;
+    }
+
+    #jum2 {
+        background: url("@Url.Content("~/image/10.jpg")") no-repeat;
+        background-size: cover;
+    }
+
+    .imgwrapper {
+        min-width: 100%;
+    }
+    .TextSizeCh {
+        font-family: 'Microsoft JhengHei', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    }
+</style>
+<br />
+<center>
+    <div class="row">
+        <div class="col-md-12">
+            @if (UserLimit[0] == "True")
+            {
+                <div id="carousel-example-generic" class="carousel slide" data-ride="carousel" style="max-height: 480px">
+                    <!-- Indicators -->
+                    <ol class="carousel-indicators">
+                        <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                        <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                    </ol>
+                    <!-- Wrapper for slides -->
+                    <div class="carousel-inner" role="listbox">
+                        <a class="item active" style="cursor: pointer" href="@Url.Action("AllDM", "AnyDMorBuy")" data-toggle="tooltip" data-placement="bottom" title="訂飲料">
+                            <img src="~/image/12ex.jpg" alt="02" style="overflow: hidden;">
+                            <div class="carousel-caption">
+                                <h1>Let's Drinking!</h1>
+                                <p class="lead">訂購飲料點這裡!</p>
+                            </div>
+                        </a>
+                        <a class="item" style="cursor: pointer" href="@Url.Action("AllDM", "AnyDMorBuy")" data-toggle="tooltip" data-placement="bottom" title="訂飲料">
+                            <img src="../image/14B.jpg" alt="07">
+                            <div class="carousel-caption">
+                                <h1>Let's Drinking!</h1>
+                                <p class="lead">訂購 / 揪團點這裡!</p>
+                            </div>
+                        </a>
+                    </div>
+                    <!-- Controls -->
+                    <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+            }
+        </div>
+
+        @if (UserLimit[0] == "True")
+        {
+            <div class="col-md-12" style="margin-top: 0.5em;">
+                <div class="pull-left TextSizeCh" style="color: #808080;">
+                    <font style="font-size: 16px; font-weight: bold; margin-left: 20px;">飲料DM</font>
+                </div>
+                <div class="pull-right TextSizeCh">
+                    <a href="@Url.Action("AllDM", "AnyDMorBuy")" style="color: #808080;">
+                        <font style="font-size: 14px; font-weight: bold; margin-right: 10px;">更多></font>
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-12" style="margin-top: 1.8em;">
+                <div style="overflow-x: auto; overflow-y: hidden;">
+                    @{
+                        Html.RenderAction("_MenuHomePartial", "Home");
+                    }
+                </div>
+            </div>
+        }      
+    </div>
+</center>

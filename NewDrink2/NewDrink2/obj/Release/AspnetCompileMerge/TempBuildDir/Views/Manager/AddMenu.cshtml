@@ -1,0 +1,547 @@
+﻿@using NewDrink2.Models
+@model NewDrink2.Models.NewMenu
+@{
+    Layout = "~/Views/Shared/_MyMenuLayoutPartial.cshtml";
+    ViewBag.Title = "建立菜單";
+}
+
+<style>
+    .monkeyb-cust-file {
+        overflow: hidden;
+        position: relative;
+        display: inline-block;
+        background-color: #04c6c4;
+        color: #fff;
+        text-align: center;
+        -web-border-radius: 10px;
+        -moz-border-radius: 10px;
+        border-radius: 10px;
+        padding: 5px 10px;
+        font-size: 16px;
+        font-family: Arial,Microsoft JhengHei;
+        margin-top: 5px;
+    }
+
+        .monkeyb-cust-file:hover {
+            background-color: #068b8a;
+            cursor: pointer;
+        }
+
+        .monkeyb-cust-file input {
+            position: absolute;
+            opacity: 0;
+            filter: alpha(opacity=0);
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+        }
+</style>
+
+<h2>@ViewBag.Title</h2>
+<br />
+@using (Html.BeginForm("AddMenu", "Manager", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+{
+    @Html.ValidationSummary(true)
+    <p class="text-danger">@ViewBag.EmptyError</p>    
+
+    <div class="form-group col-md-6">
+        <div class="form-group col-md-12">
+            @Html.LabelFor(m => m.MenuName, new { @class = "control-label" })
+            <br />
+            @Html.TextBoxFor(m => m.MenuName, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.MenuName, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group col-md-12">
+            @Html.LabelFor(m => m.MenuPhone, new { @class = "control-label" })
+            <br />
+            @Html.TextBoxFor(m => m.MenuPhone, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.MenuPhone, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group col-md-12">
+            @Html.LabelFor(m => m.Addr, new { @class = "control-label" })
+            <br />
+            @Html.TextBoxFor(m => m.Addr, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Addr, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group col-md-12">
+            @Html.LabelFor(m => m.OrderConditions, new { @class = "control-label" })
+            <br />
+            @Html.TextBoxFor(m => m.OrderConditions, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.OrderConditions, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group col-md-5" style="padding-top: 20px;">
+        <img id="seeImage" src="../../MenuImage/19.jpg" style="max-width: 280px;" />
+        <br />
+        <div class="monkeyb-cust-file">
+            <img src="../../image/upload.png" />
+            <span>選擇圖片</span>
+            <input type="file" id="imageMenu" name="file" />
+        </div>
+    </div>
+    <div class="form-group col-md-5">
+        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal01">加料</button>
+        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal02">甜度</button>
+        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal03">冰度</button>
+        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal04">尺寸</button>
+    </div>
+
+
+
+    //加料
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="myModal01">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title text-center">編輯菜單加料表</h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered">
+                        <tr class="active">
+                            <td>加料表</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="text-danger">@ViewBag.PriceSmall</p>
+                                @if (Model.AddItemCreate == null || Model.AddItemCreate.Count == 0)
+                                {
+                                    <p>沒有任何項目.</p>
+                                    <ul id="ItemType" style="list-style-type: none"></ul>
+                                }
+                                else
+                                {
+                                    <ul id="ItemType" style="list-style-type: none">
+                                        @foreach (AddItemCreate items in Model.AddItemCreate)
+                                        {
+                                            Html.RenderPartial("_ItemTypeEntry", items);
+                                        }
+                                    </ul>
+                                }
+                                <a id="addItem" href="#">增加一行</a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    //甜度
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="myModal02">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title text-center">編輯菜單甜度</h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered">
+                        <tr class="active">
+                            <td>
+                                甜度表
+                                <div class="pull-right">
+                                    <input type="checkbox" id="checkAllSweet" />全選
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td id="SweetCheck">
+                                @for (int i = 0; i < Model.Sweet.Count; i++)
+                                {
+                                    @Html.HiddenFor(model => model.Sweet[i].Value)
+                                    @Html.CheckBoxFor(model => (model.Sweet[i]).Selected)
+                                    @Html.DisplayFor(model => model.Sweet[i].Text)
+                                    <br />
+                                }
+                                @Html.ValidationMessageFor(model => model.Sweet, "", new { @class = "text-danger" })
+                                <hr />
+                                @if (Model.SweetName == null || Model.SweetName.Count == 0)
+                                {
+                                    <ul id="SweetType" style="list-style-type: none"></ul>
+                                }
+                                else
+                                {
+                                    <ul id="SweetType" style="list-style-type: none">
+                                        @foreach (SweetType items in Model.SweetName)
+                                        {
+                                            Html.RenderPartial("_SweetTypeEntry", items);
+                                        }
+                                    </ul>
+                                }
+                                <a id="addSweet" href="#">新增甜度</a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    //冰度
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="myModal03">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title text-center">編輯菜單冰度表</h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered">
+                        <tr class="active">
+                            <td>
+                                冰度表
+                                <div class="pull-right">
+                                    <input type="checkbox" id="checkAllIce" />全選
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td id="IceCheck">
+                                @for (int i = 0; i < Model.IceHot.Count; i++)
+                                {
+                                    @Html.HiddenFor(model => model.IceHot[i].Value)
+                                    @Html.CheckBoxFor(model => (model.IceHot[i]).Selected)
+                                    @Html.DisplayFor(model => model.IceHot[i].Text)
+                                    <br />
+                                }
+                                @Html.ValidationMessageFor(model => model.IceHot, "", new { @class = "text-danger" })
+                                <hr />
+                                @if (Model.IceName == null || Model.IceName.Count == 0)
+                                {
+                                    <ul id="IceType" style="list-style-type: none"></ul>
+                                }
+                                else
+                                {
+                                    <ul id="IceType" style="list-style-type: none">
+                                        @foreach (IceType items in Model.IceName)
+                                        {
+                                            Html.RenderPartial("_IceTypeEntry", items);
+                                        }
+                                    </ul>
+                                }
+                                <a id="addIce" href="#">新增冰度</a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    //尺寸
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="myModal04">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title text-center">編輯菜單尺寸表</h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered">
+                        <tr class="active">
+                            <td>
+                                飲料尺寸表
+                                <div class="pull-right">
+                                    <input type="checkbox" id="checkAllSize" />全選
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td id="SizeCheck">
+                                @for (int i = 0; i < Model.Size.Count; i++)
+                                {
+                                    @Html.HiddenFor(model => model.Size[i].Value)
+                                    @Html.CheckBoxFor(model => (model.Size[i]).Selected)
+                                    @Html.DisplayFor(model => model.Size[i].Text)
+                                    <br />
+                                }
+                                @Html.ValidationMessageFor(model => model.Size, "", new { @class = "text-danger" })
+                                <hr />
+                                @if (Model.SizeName == null || Model.SizeName.Count == 0)
+                                {
+                                    <ul id="SizeType" style="list-style-type: none"></ul>
+                                }
+                                else
+                                {
+                                    <ul id="SizeType" style="list-style-type: none">
+                                        @foreach (SizeType items in Model.SizeName)
+                                        {
+                                            Html.RenderPartial("_SizeTypeEntry", items);
+                                        }
+                                    </ul>
+                                }
+                                <a id="addSize" href="#">新增尺寸</a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+    @*<br />
+    <p class="text-danger">@ViewBag.PriceSmall</p>
+    <div class="col-md-11">
+        <div class="col-md-3">
+            <table class="table table-bordered">
+                <tr class="active">
+                    <td>加料表</td>
+                </tr>
+                <tr>
+                    <td>
+                        @if (Model.AddItemCreate == null || Model.AddItemCreate.Count == 0)
+                        {
+                            <p>沒有任何項目.</p>
+                            <ul id="ItemType" style="list-style-type: none"></ul>
+                        }
+                        else
+                        {
+                            <ul id="ItemType" style="list-style-type: none">
+                                @foreach (AddItemCreate items in Model.AddItemCreate)
+                                {
+                                    Html.RenderPartial("_ItemTypeEntry", items);
+                                }
+                            </ul>
+                        }
+                        <a id="addItem" href="#">增加一行</a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-md-3">
+            <table class="table table-bordered">
+                <tr class="active">
+                    <td>
+                        甜度表
+                        <div class="pull-right">  
+                            <input type="checkbox" id="checkAllSweet" />全選
+                        </div>                       
+                    </td>
+                </tr>
+                <tr>
+                    <td id="SweetCheck">                       
+                        @for (int i = 0; i < Model.Sweet.Count; i++)
+                        {
+                            @Html.HiddenFor(model => model.Sweet[i].Value)
+                            @Html.CheckBoxFor(model => (model.Sweet[i]).Selected)
+                            @Html.DisplayFor(model => model.Sweet[i].Text) 
+                            <br />
+                        }                       
+                        @Html.ValidationMessageFor(model => model.Sweet, "", new { @class = "text-danger" })
+                        <hr />
+                        @if (Model.SweetName == null || Model.SweetName.Count == 0)
+                        {
+                            <ul id="SweetType" style="list-style-type: none"></ul>
+                        }
+                        else
+                        {
+                            <ul id="SweetType" style="list-style-type: none">
+                                @foreach (SweetType items in Model.SweetName)
+                                {
+                                    Html.RenderPartial("_SweetTypeEntry", items);
+                                }
+                            </ul>
+                        }
+                        <a id="addSweet" href="#">新增甜度</a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-md-3">
+            <table class="table table-bordered">
+                <tr class="active">
+                    <td>
+                        冰度表
+                        <div class="pull-right">
+                            <input type="checkbox" id="checkAllIce" />全選
+                        </div> 
+                    </td>
+                </tr>
+                <tr>
+                    <td id="IceCheck">
+                        @for (int i = 0; i < Model.IceHot.Count; i++)
+                        {
+                            @Html.HiddenFor(model => model.IceHot[i].Value)
+                            @Html.CheckBoxFor(model => (model.IceHot[i]).Selected)
+                            @Html.DisplayFor(model => model.IceHot[i].Text)
+                            <br />
+                        }
+                        @Html.ValidationMessageFor(model => model.IceHot, "", new { @class = "text-danger" })
+                        <hr />
+                        @if (Model.IceName == null || Model.IceName.Count == 0)
+                        {
+                            <ul id="IceType" style="list-style-type: none"></ul>
+                        }
+                        else
+                        {
+                            <ul id="IceType" style="list-style-type: none">
+                                @foreach (IceType items in Model.IceName)
+                                {
+                                    Html.RenderPartial("_IceTypeEntry", items);
+                                }
+                            </ul>
+                        }                        
+                        <a id="addIce" href="#">新增冰度</a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-md-3">
+            <table class="table table-bordered">
+                <tr class="active">
+                    <td>
+                        飲料尺寸表
+                        <div class="pull-right">
+                            <input type="checkbox" id="checkAllSize" />全選
+                        </div> 
+                    </td>
+                </tr>
+                <tr>
+                    <td id="SizeCheck">
+                        @for (int i = 0; i < Model.Size.Count; i++)
+                        {
+                            @Html.HiddenFor(model => model.Size[i].Value)
+                            @Html.CheckBoxFor(model => (model.Size[i]).Selected)
+                            @Html.DisplayFor(model => model.Size[i].Text)
+                            <br />
+                        }
+                        @Html.ValidationMessageFor(model => model.Size, "", new { @class = "text-danger" })
+                        <hr />
+                        @if (Model.SizeName == null || Model.SizeName.Count == 0)
+                        {
+                            <ul id="SizeType" style="list-style-type: none"></ul>
+                        }
+                        else
+                        {
+                            <ul id="SizeType" style="list-style-type: none">
+                                @foreach (SizeType items in Model.SizeName)
+                                {
+                                    Html.RenderPartial("_SizeTypeEntry", items);
+                                }
+                            </ul>
+                        }
+                        <a id="addSize" href="#">新增尺寸</a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>*@
+
+
+    <br />
+    <p></p>
+    <br /><br /><br /><br /><br />
+    <br /><br /><br /><br /><br />
+
+    <div class="col-md-10">
+        <div class="container">
+            <br />
+            <input type="submit" value="儲存並建立飲料清單" class="btn btn-primary" />
+            @Html.ActionLink("返回", "MyMenu", routeValues: null, htmlAttributes: new { @class = "btn btn-default" })
+        </div>
+    </div>
+
+
+
+    @section Scripts {
+          @if ((!String.IsNullOrEmpty(ViewBag.AddItem) && ViewBag.AddItem != null) ||(!String.IsNullOrEmpty(ViewBag.PriceSmall) && ViewBag.PriceSmall != null))
+          {
+                <script>
+                    $('#myModal01').modal('show');
+                </script>
+          }
+          @if ((!String.IsNullOrEmpty(ViewBag.SweetName) && ViewBag.SweetName != null))
+          {
+                <script>
+                    $('#myModal02').modal('show');
+                </script>
+          }
+          @if ((!String.IsNullOrEmpty(ViewBag.IceName) && ViewBag.IceName != null))
+          {
+                <script>
+                    $('#myModal03').modal('show');
+                </script>
+          }
+          @if ((!String.IsNullOrEmpty(ViewBag.SizeName) && ViewBag.SizeName != null))
+          {
+                <script>
+                    $('#myModal04').modal('show');
+                </script>
+          }
+
+
+        <script>
+        $(function () {
+
+            function format_float(num, pos) {
+                var size = Math.pow(10, pos);
+                return Math.round(num * size) / size;
+            }
+
+            function preview(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#seeImage').attr('src', e.target.result);
+                        var KB = format_float(e.total / 1024, 2);
+                        $('.size').text("檔案大小:" + KB + "KB");
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            $("body").on("change", "#imageMenu", function () {
+                preview(this);
+            })
+
+
+            $("#ItemType").sortable;
+            $("#addItem").click(function () {
+                $.get('/Manager/_ItemTypeEntryRow', function (template) {
+                    $("#ItemType").append(template);
+                });
+            });
+            $("#addSweet").click(function () {
+                $.get('/Manager/_SweetTypeEntryRow', function (template) {
+                    $("#SweetType").append(template);
+                });
+            });
+            $("#addIce").click(function () {
+                $.get('/Manager/_IceTypeEntryRow', function (template) {
+                    $("#IceType").append(template);
+                });
+            });
+            $("#addSize").click(function () {
+                $.get('/Manager/_SizeTypeEntryRow', function (template) {
+                    $("#SizeType").append(template);
+                });
+            });
+        });
+
+            $('#checkAllSweet').change(function (e) {
+                $('#SweetCheck input:checkbox').prop('checked', $(this).prop("checked"));
+            });
+            $('#checkAllIce').change(function (e) {
+                $('#IceCheck input:checkbox').prop('checked', $(this).prop("checked"));
+            });
+            $('#checkAllSize').change(function (e) {
+                $('#SizeCheck input:checkbox').prop('checked', $(this).prop("checked"));
+            });
+        </script>
+    }
+
+}
+
+
+

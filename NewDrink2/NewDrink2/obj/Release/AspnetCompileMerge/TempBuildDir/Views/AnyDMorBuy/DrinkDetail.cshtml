@@ -1,0 +1,537 @@
+﻿@using NewDrink2.Models
+@model NewDrink2.Models.BuyDMDrinkView
+
+@{ 
+    Layout = "~/Views/Shared/_DrinkDetailPartial.cshtml";
+}
+
+<style>
+    .bgColor {
+        background-color: #f1af70;
+        text-align: center;
+        vertical-align: middle;
+        line-height: 45px;
+    }
+    .BottomStyle {
+        width: 40%;
+        height: 48px;
+        display: block;
+        line-height: 48px;
+        text-align: center;
+    }
+    .submitFont {
+        min-width: 100%;
+        font-size: 18px;
+        background-color: #e4566c;
+        color: #ffffff;
+    }
+        .submitFont:hover {
+            background-color: #dc344e;
+        }
+    .checkType {
+        height: 290px;
+        overflow: auto;
+        border-radius: 15px;
+    }
+    select {
+        /*Chrome和Firefox里面的边框是不一样的，所以复写了一下*/
+        border: solid 1px #dbd7d7;
+        /*很关键：将默认的select选择框样式清除*/
+        appearance: none;
+        -moz-appearance: none;
+        -webkit-appearance: none;
+        /*在选择框的最右侧中间显示小箭头图片*/
+        background: url("../image/arrow.png") no-repeat scroll right center transparent;
+        /*为下拉小箭头留出一点位置，避免被文字覆盖*/
+        padding-right: 14px;
+        cursor: pointer;
+    }
+        /*清除ie的默认选择框样式清除，隐藏下拉箭头*/
+        select::-ms-expand {
+            display: none;
+        }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none !important;
+        margin: 0;
+    }
+    
+    input[type="number"] {
+        -moz-appearance: textfield;
+    }
+
+    .TextBoxText {
+        font-family: Microsoft JhengHei;
+        font-size: 20px;
+        font-weight: bold;
+        color: #08aca9;
+    }
+    .BathusClass {
+        padding: 3px 20px 2px 10px;
+        font-weight: bold;
+        color: #ffffff;
+        background-color: #ffca00;
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
+        margin-right: 0px;
+        position: relative;
+        font-size: 15px;
+    }
+    .TextSizeCh {
+        font-family: 'Microsoft JhengHei', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    }
+
+    .DivShadow {
+        -moz-box-shadow: 0 1px 4px rgba(40%, 40%, 40%, 0.3);
+        -webkit-box-shadow: 0 1px 4px rgba(40%, 40%, 40%, 0.3);
+        box-shadow: 0 1px 4px rgba(40%, 40%, 40%, 0.3);
+    }
+
+</style>
+@if (!String.IsNullOrEmpty(Model.Bathus))
+{
+    <div class="BathusClass TextSizeCh" style="position: absolute; right: 0; top: 20px;">
+        <font style="line-height: 15px;">
+            @Html.DisplayFor(model => Model.Bathus)
+        </font>
+    </div>
+}
+<nav class="navbar navbar-fixed-top NavbarBgColor" style="max-width: 10%;">
+    <div class="container pull-left" style="margin: 1.2em auto auto 0.3em;">
+        <a href="" onclick = "javascript: history.go(-1); return false;">
+            <img src="../../image/xicon.png" style="max-width: 23px;" />
+        </a>       
+    </div>
+</nav>
+
+<center>
+    <img src="../image/drink3ex.jpg" />
+</center>
+<h2 class="TextSizeCh" style="text-align: center; color: #808080">@Html.DisplayFor(model => model.DrinkName)</h2>
+<br />
+<div id="haveItem">
+    @{ 
+        Html.RenderAction("_HaveItemLimitPartial", new { SizeP = 0, MenuID = Model.MenuID, DrinkID = Model.DrinkID });
+    }    
+</div>
+<br />
+<p style="color: blue;" class="TextSizeCh">@ViewBag.ErrorMessage</p>
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.DrinkName)
+    if (ViewBag.OrderID != null)
+    {
+        string OrderID = ViewBag.OrderID;
+        @Html.Hidden("BuyCheck", OrderID);
+    }
+    <div style="overflow-y: hidden; overflow-x: auto; width: 100%; color: #808080; font-weight: bold; padding-bottom: 20px; margin-bottom: 15%;">
+        <table align="center">
+            <tr>
+                <td class="col-md-3">
+                    <div id="DSize" class="DivShadow" style="width: 200px; height: 290px; border: solid 1px #dbd7d7; border-radius: 15px; overflow: hidden;">
+                        @Html.ValidationMessageFor(model => model.SizeTypeM, "", new { @class = "text-danger" })
+                        <ul class="list-group text-center checkType" style="padding-bottom: 15px; font-family: 'Microsoft JhengHei', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">
+                            @for (int i = 0; i < Model.SizeType.Count(); i++)
+                            {
+                                <li class="list-group-item CheckDivItem text-center" style="border: solid 1px #ffffff; max-width: 180px; margin: 10px 10px 8px 10px; border-radius: 20px;" onclick="CheckSize(this)">
+                                    @Html.RadioButtonFor(model => model.SizeTypeM, Model.SizeType[i].Value, new { @onchange = "ChangePrcie()", @style = "display: none;" })
+                                    @Html.DisplayFor(model => model.SizeType[i].Text)
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </td>
+                <td class="col-md-3">
+                    <div id="DSweet" class="DivShadow" style="width: 200px; height: 290px; border: solid 1px #dbd7d7; border-radius: 15px; overflow: hidden;">
+                        @{
+                            Html.RenderAction("_DrinkSweetPartial", new { SizeP = 0, MenuID = Model.MenuID, DrinkID = Model.DrinkID, AdditemP = "0" });
+                        }
+                    </div>
+                </td>
+                <td class="col-md-3">
+                    <div id="DIce" class="DivShadow" style="width: 200px; height: 290px; border: solid 1px #dbd7d7; border-radius: 15px; overflow: hidden;">
+                        @{
+                            Html.RenderAction("_DrinkIcePartial", new { SizeP = 0, MenuID = Model.MenuID, DrinkID = Model.DrinkID, AdditemP = "0" });
+                        }
+                    </div>
+                </td>
+                <td class="col-md-3">
+                    <div id="DItem" class="DivShadow" style="width: 200px; height: 290px; border: solid 1px #dbd7d7; border-radius: 15px; overflow: hidden;">
+                        @{
+                            Html.RenderAction("_DrinkItemPartial", new { SizeP = 0, MenuID = Model.MenuID, DrinkID = Model.DrinkID, AdditemP = "0" });
+                        }
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <nav class="navbar navbar-default navbar-fixed-bottom" style="background-color: #ffffff; margin-bottom: 50px;">
+        <div style="padding-bottom: 6px;">
+            <div class="pull-left BottomStyle" style="margin-left: 4%;">
+                <dl class="dl-horizontal">
+                    <dd style="width: 150px;">
+                        <img src="../image/minus2.png" class="pull-left" style="cursor: pointer" onclick="CutQ()" />
+                        <img src="../image/Add2.png" class="pull-right" style="cursor: pointer" onclick="AddQ()" />                       
+                        @Html.TextBoxFor(model => model.Quantity, new { @type = "number", @class = "form-control TextBoxText", @style = "width: 80px; text-align: center; line-height: 20px;" })
+                        @Html.ValidationMessageFor(model => model.Quantity, "", new { @class = "text-danger" })
+                    </dd>
+                </dl>  
+            </div>
+        </div>
+        <div>
+            <div class="pull-right BottomStyle">
+                <span id="totalMoney">
+                    @{
+                        Html.RenderAction("_TotalMoneyPartial", new { SizeP = 0, Quantity = 1, AdditemP = "0", MenuID = Model.MenuID, DrinkID = Model.DrinkID });
+                    }
+                </span>
+            </div>
+        </div>
+        <div>
+            <div class="pull-right"></div>
+        </div>
+    </nav>
+    <input type="submit" class="navbar navbar-fixed-bottom bgColor submitFont" value="確認">
+}
+
+@section Scripts{
+    <script>
+        function ChangeHeight() {
+            Hth = $(window).height();
+            var Ht = Hth * 0.35;
+            var Hu = Hth * 0.33;
+            if (Ht > 290) {
+                Ht = 290;
+            }
+            if (Ht < 180) {
+                Ht = 180;
+            }
+            if (Hu > 290) {
+                Hu = 290;
+            }
+            if (Hu < 180) {
+                Hu = 180;
+            }
+
+            //改變尺寸高度
+            $('#DSize').height(Ht);
+            $('#DSize').children('ul').height(Hu);
+
+            //改變甜度高度
+            $('#DSweet').height(Ht);
+            $('#DSweet').children('ul').height(Hu);
+
+            //改變冰度高度
+            $('#DIce').height(Ht);
+            $('#DIce').children('ul').height(Hu);
+
+            //改變配料高度
+            $('#DItem').height(Ht);
+            $('#DItem').children('ul').height(Hu);
+        }
+
+        $(document).ready(function () {
+            $(window).resize(function () {
+                ChangeHeight();
+            });
+        });
+
+        window.onload = function () {
+            //調整高度(bug)
+            //ChangeHeight();
+
+            //決定要不要顯示加料限制文字
+            $("input[name='SizeTypeM']:first").click();
+            var Drink = $("input[name='SizeTypeM']:checked").val();
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("_HaveItemLimitPartial", "AnyDMorBuy")',
+                data: { SizeP: Drink, MenuID: @Model.MenuID, DrinkID: @Model.DrinkID }
+            })
+                .done(function (msg) {
+                    $('#haveItem').html(msg);
+                });
+        }
+
+        //點擊div時勾選配料
+        function CheckItemDiv(obj){
+            $(obj).children('input:checkbox').click();
+            var bgChange = $(obj).children('input:checkbox:checked').val();
+            var itemCheck = $("#checkItem").children('li').children('input:checkbox:checked').length;
+            //改變背景色
+            if(bgChange)
+            {
+                $(obj).css("background-color", "#ff7f90");
+                $(obj).css("color", "#ffffff");
+                //限制最多只能勾選三樣(恢復顏色)
+                if (itemCheck > 3)
+                {
+                    $(obj).css("background-color", "");
+                    $(obj).css("color", "");
+                }
+            }
+            if(!bgChange || bgChange == undefined || bgChange == null)
+            {
+                $(obj).css("background-color", "");
+                $(obj).css("color", "");
+            }
+        }
+
+         //點擊li時勾選尺寸
+        function CheckSize(obj) {
+            //清空顏色
+            $(obj).parent('ul').children('li').each(function () {
+                $(this).css("background-color", "");
+                $(this).css("color", "");
+            });
+
+            $(obj).children("input:radio").prop("checked", true);
+            ChangePrcie();
+            //改變背景色
+            $(obj).css("background-color", "#ff7f90");
+            $(obj).css("color", "#ffffff");
+        }
+
+        //點擊li時勾選甜度
+        function CheckSweet(obj) {
+            //清空顏色
+            $(obj).parent('ul').children('li').each(function () {
+                $(this).css("background-color", "");
+                $(this).css("color", "");
+            });
+
+            $(obj).children("input:radio").prop("checked", true);
+            //改變背景色
+            $(obj).css("background-color", "#ffdb52");
+            $(obj).css("color", "#ffffff");
+        }
+
+        //點擊li時勾選冰度
+        function CheckIce(obj) {
+            //清空顏色
+            $(obj).parent('ul').children('li').each(function () {
+                $(this).css("background-color", "");
+                $(this).css("color", "");
+            });
+
+            $(obj).children("input:radio").prop("checked", true);
+            //改變背景色
+            $(obj).css("background-color", "#4ad7d5");
+            $(obj).css("color", "#ffffff");
+        }
+
+        //以選擇Size時改變視圖
+        function ChangePrcie() {
+            selectitem = [];//陣列歸零
+            var Drink = $("input[name='SizeTypeM']:checked").val();
+            //甜度選單
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("_DrinkSweetPartial", "AnyDMorBuy")',
+                data: { SizeP: Drink, MenuID: @Model.MenuID, DrinkID: @Model.DrinkID, AdditemP: "0" }
+            })
+                .done(function (msg) {
+                    $('#DSweet').html(msg);
+                });
+            //冰度選單
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("_DrinkIcePartial", "AnyDMorBuy")',
+                data: { SizeP: Drink, MenuID: @Model.MenuID, DrinkID: @Model.DrinkID, AdditemP: "0" }
+            })
+                .done(function (msg) {
+                    $('#DIce').html(msg);
+                });
+            //配料選單
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("_DrinkItemPartial", "AnyDMorBuy")',
+                data: { SizeP: Drink, MenuID: @Model.MenuID, DrinkID: @Model.DrinkID, AdditemP: "0" }
+            })
+                .done(function (msg) {
+                    $('#DItem').html(msg);
+                });
+            var quantity = $("#Quantity").val();
+            //價錢小計
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("_TotalMoneyPartial", "AnyDMorBuy")',
+                data: { SizeP: Drink, Quantity: quantity, MenuID: @Model.MenuID, DrinkID: @Model.DrinkID, AdditemP: "0" }
+            })
+                .done(function (msg) {
+                    $('#totalMoney').html(msg);
+                });
+        }
+
+        //以輸入價錢時改變金額
+        document.getElementById("Quantity").onblur = function () {
+            if (isNaN(this.value.valueOf()) || this.value == "" || this.value <= 0 || this.value.indexOf(" ") != -1) {
+                alert("請輸入介於1-99999之間的數量.");
+                this.value = 1;
+                //return false;
+            }
+            //價錢小計
+            //計算勾選的配料數量
+            var additem = myCheckeditem();
+            var Drink = $("input[name='SizeTypeM']:checked").val();
+            var qu = this.value;
+
+            $.ajax({
+                 type: 'GET',
+                 url: '@Url.Action("_TotalMoneyPartial", "AnyDMorBuy")',
+                 data: { SizeP: Drink, Quantity: qu, MenuID: @Model.MenuID, DrinkID: @Model.DrinkID, AdditemP: additem }
+            })
+                 .done(function (msg) {
+                     $('#totalMoney').html(msg);
+                 });
+        };
+
+        //使用者輸入及時計算
+        document.getElementById("Quantity").onkeyup = function () {
+            if (this.value.indexOf(" ") != -1 || this.value > 99999) {
+                alert("請輸入介於1-99999之間的數量.");
+                this.value = 1;
+            }
+            //價錢小計
+            //計算勾選的配料數量
+            var additem = myCheckeditem();
+            var Drink = $("input[name='SizeTypeM']:checked").val();
+            var qu = this.value;
+
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("_TotalMoneyPartial", "AnyDMorBuy")',
+                data: { SizeP: Drink, Quantity: qu, MenuID: @Model.MenuID, DrinkID: @Model.DrinkID, AdditemP: additem }
+            })
+                .done(function (msg) {
+                    $('#totalMoney').html(msg);
+                });
+        };
+
+        //取出陣列
+        function myCheckeditem() {
+            var str = "0";
+            selectitem2 = [];
+            var itemCheck = $("#checkItem").children('li').children('input:checkbox:checked').length;
+            //alert(itemCheck);
+            if (itemCheck > 0) {
+                $("#checkItem").children('li').children('input:checkbox:checked').each(function () {
+                    var va = $(this).parent('li').children("input[type='hidden']:first").val();
+                    //alert(va);
+                    selectitem2.push(va);
+                });
+                for (i = 0; i < selectitem2.length; i++) {
+                    str = str + "," + selectitem2[i];
+                }
+            }
+            return str;
+        }
+
+        //計算配料陣列
+        var selectitem = [];
+        //取得加料價的ID
+        function myAddvalue(obj) {
+            var tt = $(obj).parent('li').children('input:checkbox:checked').val();
+            var Drink = $("input[name='SizeTypeM']:checked").val();
+            var qu = $("#Quantity").val();
+            var pu = $(obj).parent('li').children("input[type='hidden']:first").val();
+            var itemCheck = $("#checkItem").children('li').children('input:checkbox:checked').length;
+            if (itemCheck > 3) {
+                alert("最多只能選三樣配料");
+                //限制三樣後就不能勾選了(勾選狀態取消)
+                $(obj).parent('li').children('input:checkbox').removeAttr('checked');
+            }
+            else {
+                //如果為checked
+                if (tt) {
+                    //加進陣列
+                    var str = "";
+                    selectitem.push(pu);
+                    //alert(selectitem);
+                    for (i = 0; i < selectitem.length; i++)
+                    {
+                        str = str + "," + selectitem[i];
+                    }
+                    //加進價錢
+                    $.ajax({
+                        type: 'GET',
+                        url: '@Url.Action("_TotalMoneyPartial", "AnyDMorBuy")',
+                        data: { SizeP: Drink, Quantity: qu, AdditemP: str, MenuID: @Model.MenuID, DrinkID: @Model.DrinkID }
+                    })
+                        .done(function (msg) {
+                            $('#totalMoney').html(msg);
+                        });
+                }
+                if (!tt || tt == undefined || tt == null) {
+                    //從陣列減去
+                    var str = "";
+                    var index = selectitem.indexOf(pu);
+                    selectitem.splice(index, 1);
+                    //alert(selectitem);
+
+                    for (i = 0; i < selectitem.length; i++) {
+                        str = str + "," + selectitem[i];
+                    }
+                    //從新計算價錢
+                    $.ajax({
+                        type: 'GET',
+                        url: '@Url.Action("_TotalMoneyPartial", "AnyDMorBuy")',
+                        data: { SizeP: Drink, Quantity: qu, AdditemP: str, MenuID: @Model.MenuID, DrinkID: @Model.DrinkID }
+                    })
+                        .done(function (msg) {
+                            $('#totalMoney').html(msg);
+                        });
+                }
+                //alert(tt);
+            }//End else.
+        }//End myAddvalue funciton.
+
+        //加號圖片效果
+        function AddQ() {
+            var quantity = $("#Quantity").val();
+            var result = parseInt(quantity) + 1;
+            if (result > 0 && result < 99999) {
+                $("#Quantity").val(result);
+                var additem = myCheckeditem();
+                var Drink = $("input[name='SizeTypeM']:checked").val();
+                var qu = $("#Quantity").val();
+                //價錢小計
+                //計算勾選的配料數量
+                $.ajax({
+                    type: 'GET',
+                    url: '@Url.Action("_TotalMoneyPartial", "AnyDMorBuy")',
+                    data: { SizeP: Drink, Quantity: qu, MenuID: @Model.MenuID, DrinkID: @Model.DrinkID, AdditemP: additem }
+                })
+                    .done(function (msg) {
+                        $('#totalMoney').html(msg);
+                    });
+            }
+        }
+
+        //減號圖片效果
+        function CutQ() {
+            var quantity = $("#Quantity").val();
+            var result = parseInt(quantity) - 1;
+            if (!(result < 0) && (result != 0 || result > 0)) {
+                $("#Quantity").val(quantity - 1);
+                var additem = myCheckeditem();
+                var Drink = $("input[name='SizeTypeM']:checked").val();
+                var qu = $("#Quantity").val();
+                //價錢小計
+                //計算勾選的配料數量
+                $.ajax({
+                    type: 'GET',
+                    url: '@Url.Action("_TotalMoneyPartial", "AnyDMorBuy")',
+                    data: { SizeP: Drink, Quantity: qu, MenuID: @Model.MenuID, DrinkID: @Model.DrinkID, AdditemP: additem }
+                })
+                    .done(function (msg) {
+                        $('#totalMoney').html(msg);
+                    });
+            }
+        }
+    </script>
+}

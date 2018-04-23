@@ -1,0 +1,144 @@
+﻿@using NewDrink2.Models
+@model IEnumerable<NewDrink2.Models.LeaderSendMessage>
+
+@{
+    Layout = "~/Views/Shared/_MessageViewHistoryPartial.cshtml";
+    var NullTime = Convert.ToDateTime("2000/1/1 12:00:00");
+    var str = Convert.ToDateTime("1999-01-01 00:00:00");
+}
+<style>
+    a {
+        text-decoration: none !important;
+    }
+
+    .bottomStyleR {
+        width: 90%;
+        height: 48px;
+        display: block;
+        line-height: 48px;
+        text-align: center;
+        background-color: #e4566c;
+        color: #ffffff;
+    }
+
+    .bottomStyleL {
+        width: 10%;
+        height: 48px;
+        display: block;
+        line-height: 48px;
+        text-align: center;
+        background-color: #fbca29;
+    }
+
+    .NavbarBgColor {
+        margin-top: 50px;
+    }
+
+    .TopStyle {
+        width: 50%;
+        height: 48px;
+        display: block;
+        line-height: 48px;
+        text-align: center;
+    }
+
+    .bottomTotNav {
+        margin-bottom: 50px;
+    }
+    .TextSizeCh {
+        font-family: 'Microsoft JhengHei', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    }
+    .ALink {
+        color: #04c6c4;
+        font-size: 16px;
+    }
+
+        .ALink:hover {
+            color: #6beeed;
+        }
+</style>
+<nav class="navbar navbar-fixed-top NavbarBgColor" style="border-bottom: solid 2px #c1bdbd; background-color: #ffffff">
+    <a href="@Url.Action("MessageView_Read", "Home")" style="color: #04c6c4">
+        <div class="pull-right TopStyle">
+            <font size="3" class="TextSizeCh">已讀訊息</font>
+        </div>
+    </a>
+    <a href="#" style="color: #04c6c4">
+        <div class="pull-right TopStyle" style="border-bottom: solid 4px #04c6c4">
+            <font size="3" class="TextSizeCh">已寄送的訊息</font>
+        </div>
+    </a>
+</nav>
+
+<div style="margin-top: 50px;">
+    @if (!String.IsNullOrEmpty(ViewBag.NoMsg))
+    {
+        <br /><br /><br /><br />
+        <center>
+            <img src="../image/noMessage.png" />
+        </center>
+        <br />
+        <p class="text-center TextSizeCh" style="color: #dcdcdc; font-size: 20px;">@ViewBag.NoMsg</p>
+    }    
+    @if (String.IsNullOrEmpty(ViewBag.NoMsg))
+    {
+        <div class="panel panel-default">
+            @foreach (var item in Model)
+            {
+                <div class="panel-body listsline" style="font-size: 18px; border-bottom: solid 1px #d5d4d4;">
+                    <div class="pull-left TextSizeCh" style="min-width: 65%;">
+                        <div class="pull-left" style="line-height: 70px; margin-right: 10px;">
+                            <img src="../image/drink3ex2.png" />
+                        </div>
+                        <font style="color: #808080">
+                            主旨:
+                            @Html.DisplayFor(modelItem => item.Subject)
+                        </font><br />
+                        <font style="color: #808080;">
+                            內容:
+                            @Html.DisplayFor(modelItem => item.Body)
+                        </font><br />
+                        <a href="@Html.DisplayFor(modelItem => item.Alink)" class="ALink">
+                            <img src="../../image/timer.png" style="max-width: 15px;" />
+                            @Html.DisplayFor(modelItem => item.SendTime)
+                            @if (item.EndOverTime > NullTime && item.EndOverTime != str)
+                            {
+                                var Etime = " 至 " + item.EndOverTime + " 止";
+                                <font>@Etime</font>
+                            } 
+
+                        </a>                     
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@if (TempData["message"] != null)
+{
+    var str2 = Json.Encode(TempData["message"]).Trim('"');
+
+    <div class="modal fade bs-example-modal-sm3" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content" style="border-radius: 20px;">
+                <div class="modal-body text-center TextSizeCh">
+                    <font style="font-size: 16px; font-weight: bolder; color: #727272; margin-bottom: 20px;" class="modal-title text-center">提示</font><br />
+                    <font style="color: #cccccc; margin-bottom: 10px; margin-top: 20px;">@str2</font>
+                    <p class="text-center TextSizeCh" style=" margin-top: 20px;">
+                        <a href="#" class="btn btn-default" data-dismiss="modal" style="width: 60%; border-radius: 20px; background-color: #04c6c4; color: #ffffff;">確認</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @section Scripts{
+        <script>
+            var message = @Html.Raw(Json.Encode(TempData["message"]));
+            $('.bs-example-modal-sm3').modal('show');
+            //alert(message);
+        </script>
+    }
+    
+}

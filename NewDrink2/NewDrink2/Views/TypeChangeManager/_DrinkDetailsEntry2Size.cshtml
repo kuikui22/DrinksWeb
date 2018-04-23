@@ -1,0 +1,11 @@
+﻿@using NewDrink2.Models
+@model NewDrink2.Models.Add2_Drinks_Size
+
+@using (Html.BeginCollectionItem2("Add2_Drinks_Sizes"))
+{
+    <td>
+        @Html.HiddenFor(model => Model.SizeID)
+        @Html.HiddenFor(model => Model.SizeName)
+        @Html.EditorFor(model => Model.Price, new { htmlAttributes = new { @class = "form-control" } })
+    </td>
+}

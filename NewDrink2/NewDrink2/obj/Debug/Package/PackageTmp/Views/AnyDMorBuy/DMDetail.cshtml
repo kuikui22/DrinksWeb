@@ -1,0 +1,174 @@
+﻿@using NewDrink2.Models
+@model NewDrink2.Models.DMDetailsView
+@{     
+    Layout = null;
+    var type = ViewBag.Tyep;
+    string Identity1 = NewDrink2.Models.Helper.GetUserIdentity();
+    string Identity2 = NewDrink2.Models.Helper.GetUserIdentity2();
+    string UserMail = NewDrink2.Models.Helper.GetUserMail();
+    int Mess = NewDrink2.Models.HomeModels.GetHowManyMessage_UseUserEmail(UserMail);
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Drinks!</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <style>
+        a {
+            text-decoration: none !important;
+        }
+
+        .BgColor {
+            background-color: #d7d6d6;
+        }
+
+        .NavbarBgColor {
+            margin-top: 70px;
+        }
+
+        .bottomStyle {
+            width: 50%;
+            height: 48px;
+            display: block;
+            line-height: 48px;
+            text-align: center;
+            color: #ffffff;
+        }
+
+        .bgColor {
+            background-color: #ef7e2e;
+            text-align: center;
+            vertical-align: middle;
+            line-height: 45px;
+            color: #fff;
+        }
+
+        .bgColor2 {
+            background-color: #04c6c4;
+            text-align: center;
+            vertical-align: middle;
+            line-height: 45px;
+            color: #fff;
+        }
+
+        .TextSizeCh {
+            font-family: 'Microsoft JhengHei', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
+    </style> 
+    <script>
+        function SeclectType(num, myType, OrderID, obj) {
+            //清空顏色
+            $(obj).parent('td').parent('tr').children('td').children('a').each(function () {
+                $(this).css("background-color", "#ffca00");
+            });
+            //改變顏色
+            $(obj).css("background-color", "#ffb20c");
+
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("_DMDetailPartial", "AnyDMorBuy")',
+                data: { id: @Model.MenuID, SearchString: myType, BuyCheck: OrderID }
+            })
+                .done(function (msg) {
+                    $('#' + num).html(msg);
+                });
+        }
+    </script>
+</head>
+<body>
+    <div class="container-fluid">
+        <nav class="navbar navbar-fixed-top bgColor2 TextSizeCh text-center">
+            <a href="@Url.Action("Index", "Home")">
+                <div class="pull-left">
+                    <font color="#ffffff" size="5" style="line-height: 200%; margin-left: 10px;">
+                        ＜
+                    </font>
+                </div>
+            </a>
+            <div style="margin-top: 5px;">
+                <font color="#ffffff" style="line-height: 200%; font-size: 20px;">
+                    @Html.DisplayFor(model => model.MenuName)
+                </font>
+            </div>
+        </nav>
+        <div class="navbar-fixed-top" style="margin-top: 52px; background-color: #ffca00; line-height: 51px; height: 58px; overflow-y: hidden; overflow-x: auto;">
+            @{
+                Html.RenderAction("_DMDetailLayout", new { id = Model.MenuID });
+            }           
+        </div>
+        <br /><br /><br />
+        @if (ViewBag.OrderID != null)
+        {
+            string OrderID = ViewBag.OrderID;
+            @Html.Hidden("BuyCheck", OrderID);
+        }
+        <div>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                @for (int i = 0; i < type.Count; i++)
+                {
+                    if (i == 0)
+                    {
+                        <div role="tabpanel" class="tab-pane fade in active" id="@i">
+                            @{
+                                Html.RenderAction("_DMDetailPartial", new { id = Model.MenuID, SearchString = type[0], BuyCheck = ViewBag.OrderID });
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div role="tabpanel" class="tab-pane fade" id="@i">
+                            @{
+                                Html.RenderAction("_DMDetailPartial", new { id = Model.MenuID, SearchString = type[i], BuyCheck = ViewBag.OrderID });
+                             }
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+
+        <br /><br /><br /><br /><br />
+        @*如果資料庫有找到使用者有訂單的飲料就換成"確認商品"*@
+        @if (ViewBag.TotBuy != null || ViewBag.TotBuy > 0)
+        {
+            <nav class="navbar navbar-default navbar-fixed-bottom bgColor">
+                <a href="@Url.Action("OrderingDetail", "AnyDMorBuy", new { OrderID = ViewBag.OrderID })">
+                    <div style="max-width: 100%; color: #fff;">
+                        <font size="4">確認商品x @ViewBag.TotBuy</font>
+                    </div>
+                </a>
+            </nav>
+        }
+        else
+        {
+            <nav class="navbar navbar-default navbar-fixed-bottom NavbarBgColor" style="background-color: #ff5e73;">
+                <a href="@Url.Action("SendMessage_GetMenu", "AnyDMorBuy", new { MenuID = Model.MenuID })">
+                    <div class="pull-left bottomStyle">
+                        <font size="4">揪團</font>
+                    </div>
+                </a>
+                <a href="#" onclick="alert('您尚未點選飲料'); return false;">
+                    <div class="pull-right bottomStyle" style="border-left: solid 2px #ffffff;">
+                        <font size="4">自己訂</font>
+                    </div>
+                </a>
+            </nav>
+        }
+    </div>
+    
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+
+</body>
+
+</html>
+
+
+
+
+
+

@@ -1,0 +1,9 @@
+﻿@using NewDrink2.Models
+@model NewDrink2.Models.BuyDMDrinkAdditem
+
+@if (Model.AddItem != null && Model.AddItem.Count() > 3)
+{
+    <p class="TextSizeCh" style="text-align: center; color: #7988a1; font-size: 14px;">最多可加三樣配料</p>
+}
+
+

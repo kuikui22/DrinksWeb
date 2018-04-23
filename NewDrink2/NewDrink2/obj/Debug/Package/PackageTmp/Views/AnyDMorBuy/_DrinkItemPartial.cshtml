@@ -1,0 +1,38 @@
+﻿@using NewDrink2.Models
+@model NewDrink2.Models.BuyDMDrinkAdditem
+
+<style>
+    .CheckDivItem {
+        cursor: pointer;
+        font-size: 16px;
+    }
+        .CheckDivItem:hover {
+            background-color: #ff7f90;
+            color: #ffffff;
+        }
+</style>
+
+@if (Model.AddItem == null || Model.AddItem.Count == 0)
+{
+    <ul class="list-group text-center" id="checkItem" style="overflow: auto; border: solid 1px #dbd7d7; border-radius: 15px; font-size: 16px;">
+        <li class="list-group-item" style="border: solid 1px #ffffff; border-radius: 20px; font-family: Microsoft JhengHei;">
+            無配料可添加
+        </li>
+    </ul>
+}
+else
+{
+    <ul class="list-group text-center" id="checkItem" style="height: 250px; overflow: auto; border: solid 1px #dbd7d7; border-radius: 15px;">
+        @using (Html.BeginCollectionItem2("AddItemType"))
+        {
+            for (int i = 0; i < Model.AddItem.Count; i++)
+            {
+                <li class="list-group-item CheckDivItem" onclick="CheckItemDiv(this)" style="border: solid 1px #ffffff; border-radius: 20px; font-family: Microsoft JhengHei;">
+                    @Html.HiddenFor(model => model.AddItem[i].Value)
+                    @Html.CheckBoxFor(model => (model.AddItem[i]).Selected, new { @onclick = "myAddvalue(this)", @style = "display: none;" })
+                    @Html.DisplayFor(model => model.AddItem[i].Text)
+                </li>
+            }
+        }
+    </ul>
+}

@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Drinks!</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <style>
+        .bgColor {
+            background-color: #04c6c4;
+            text-align: center;
+            vertical-align: middle;
+            line-height: 45px;
+            color: #fff;
+        }
+        a {
+            text-decoration: none !important;
+        }
+        .TextSizeCh2 {
+            font-family: 'Microsoft JhengHei', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
+    </style>
+
+</head>
+<body>
+    <a href="@Url.Action("AllOrderView", "AnyDMorBuy")" style="float: left; z-index: 999999; max-width: 50px; max-height: 50px;" class="navbar-fixed-top text-center">
+        <font color="#ffffff" size="5" style="line-height: 200%;" class="TextSizeCh2">
+            ＜
+        </font>
+    </a> 
+    <nav class="navbar navbar-fixed-top bgColor">         
+        <div style="margin-top: 5px;">
+            <font color="#ffffff" style="line-height: 200%; font-size: 20px;" class="TextSizeCh2">
+                訂單詳情
+            </font>
+        </div>
+    </nav>
+
+    @RenderBody()
+
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

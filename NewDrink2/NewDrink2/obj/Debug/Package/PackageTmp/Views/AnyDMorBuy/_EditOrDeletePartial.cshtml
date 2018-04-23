@@ -1,0 +1,21 @@
+﻿@{ 
+    Layout = null;
+}
+<div class="modal fade bs-example-modal-sm2" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title text-center">提示</h4>
+            </div>
+            <div class="modal-body">
+                <p class="text-center">
+                    是否要修改或刪除飲料?
+                </p>
+                <p class="text-center">
+                    <a href="@Url.Action("EditDrinkDetail", "AnyDMorBuy", new { DetailID = ViewBag.DetailID })" class="btn btn-info" style="width: 30%;">修改</a>
+                    <a href="@Url.Action("DeleteDetail", "AnyDMorBuy", new { DetailID = ViewBag.DetailID })" class="btn btn-danger" style="width: 30%;">刪除</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

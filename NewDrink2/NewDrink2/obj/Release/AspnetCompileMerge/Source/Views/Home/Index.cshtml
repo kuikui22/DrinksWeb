@@ -1,0 +1,183 @@
+﻿@using NewDrink2.Models
+@model NewDrink2.Models.IndexImage
+
+@{
+    Layout = "~/Views/Shared/_HomeIndexLayout.cshtml";
+    ViewBag.Title = "Home Page";
+    string Identity2 = Helper.GetUserIdentity2();
+    string[] UserLimit = ViewBag.UserLimit;
+    string UserMail = NewDrink2.Models.Helper.GetUserMail();
+    int Mess = NewDrink2.Models.HomeModels.GetHowManyMessage_UseUserEmail(UserMail);
+}
+
+<style>
+
+    .imgwrapper {
+        min-width: 100%;
+    }
+    .TextSizeCh {
+        font-family: 'Microsoft JhengHei', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    }
+    .Success_Psd{
+        margin: 0 auto 0 auto;
+        z-index: 999999999999;
+        position: absolute;
+        left: 0;
+        background-color: rgba(65%, 10%, 10%, 0.8);
+        width: 100%;
+        height: 80px;
+        line-height: 80px;
+        color: #ffffff;
+        font-size: 16px;
+        border-radius: 20px;
+    }
+
+</style>
+
+@if (TempData["message"] != null)
+{
+    <center>
+        <div id="PsdSuccess" class="Success_Psd text-center" style="display: none;">
+            已成功更改密碼.
+        </div>
+    </center>
+    <script>
+            function operate() {
+                document.getElementById('PsdSuccess').style.display = "";
+                setTimeout("change0()", 1100);
+                setTimeout("change0()", 1300);
+                setTimeout("change1()", 1500);
+                setTimeout("change2()", 1700);
+                setTimeout("change3()", 1900);
+                setTimeout("change4()", 2100);
+                setTimeout("change5()", 2300);
+                setTimeout("change6()", 2700);
+                setTimeout("disappeare()", 3100);
+            }
+            function change0() {
+                document.getElementById('PsdSuccess').style.opacity = '0.7';
+            }
+            function change1() {
+                document.getElementById('PsdSuccess').style.opacity = '0.6';
+            }
+            function change2() {
+                document.getElementById('PsdSuccess').style.opacity = '0.5';
+            }
+            function change3() {
+                document.getElementById('PsdSuccess').style.opacity = '0.4';
+            }
+            function change4() {
+                document.getElementById('PsdSuccess').style.opacity = '0.3';
+            }
+            function change5() {
+                document.getElementById('PsdSuccess').style.opacity = '0.2';
+            }
+            function change6() {
+                document.getElementById('PsdSuccess').style.opacity = '0.1';
+            }
+            function disappeare() {
+
+                document.getElementById('PsdSuccess').style.display = "none";
+            }
+
+            operate();
+
+    </script>   
+}
+
+<br />
+<center>
+    <div class="row">
+        <div class="col-md-12">
+            @if (UserLimit[0] == "True")
+            {
+                <div id="carousel-example-generic" class="carousel slide" data-ride="carousel" style="max-height: 480px">
+                    <!-- Indicators -->
+                    <ol class="carousel-indicators">
+                        <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                        <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                        <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+                    </ol>
+                    <!-- Wrapper for slides -->
+                    <div class="carousel-inner" role="listbox">
+                        <a class="item active" style="cursor: pointer" href="@Url.Action("AllDM", "AnyDMorBuy")" data-toggle="tooltip" data-placement="bottom" title="訂飲料">
+                            <img src="~/IndexImage/@Model.Index01" alt="02" style="overflow: hidden; height: 468px; width: 1100px">
+                            <div class="carousel-caption">
+                                <h1>Let's Drinking!</h1>
+                                <p class="lead">訂購飲料點這裡!</p>
+                            </div>
+                        </a>
+                        <a class="item" style="cursor: pointer" href="@Url.Action("AllDM", "AnyDMorBuy")" data-toggle="tooltip" data-placement="bottom" title="訂飲料">
+                            <img src="../IndexImage/@Model.Index02" alt="07" style="overflow: hidden; height: 468px; width: 1100px">
+                            <div class="carousel-caption">
+                                <h1>Let's Drinking!</h1>
+                                <p class="lead">訂購 / 揪團點這裡!</p>
+                            </div>
+                        </a>
+                        <a class="item" style="cursor: pointer" href="@Url.Action("AllDM", "AnyDMorBuy")" data-toggle="tooltip" data-placement="bottom" title="訂飲料">
+                            <img src="../IndexImage/@Model.Index03" alt="07" style="overflow: hidden; height: 468px; width: 1100px">
+                            <div class="carousel-caption">
+                                <h1>Let's Drinking!</h1>
+                                <p class="lead">訂購 / 揪團點這裡!</p>
+                            </div>
+                        </a>
+                    </div>
+                    <!-- Controls -->
+                    <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+            }
+        </div>
+
+        @if (UserLimit[0] == "True")
+        {
+            <div class="col-md-12" style="margin-top: 0.5em;">
+                <div class="pull-left TextSizeCh" style="color: #808080;">
+                    <font style="font-size: 16px; font-weight: bold; margin-left: 20px;">飲料DM</font>
+                </div>
+                <div class="pull-right TextSizeCh">
+                    <a href="@Url.Action("AllDM", "AnyDMorBuy")" style="color: #808080;">
+                        <font style="font-size: 14px; font-weight: bold; margin-right: 10px;">更多></font>
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-12" style="margin-top: 1.8em;">
+                <div style="overflow-x: auto; overflow-y: hidden;" id="overHere" onmouseover="Main_over();" onmouseout="Main_out();">                    
+                    @{
+                        Html.RenderAction("_MenuHomePartial", "Home");
+                    }
+                </div>
+            </div>
+        }      
+    </div>
+</center>
+
+@section Scripts{
+    <script>
+        function Main_over() {
+            $('#Pre_btn').css('opacity', '0.5');
+            $('#Nex_Btn').css('opacity', '0.5');
+        }
+        function Main_out() {
+            $('#Pre_btn').css('opacity', '0');
+            $('#Nex_Btn').css('opacity', '0');
+        }
+        function Over_left() {
+            var L = $('#overHere').scrollLeft();
+            $('#overHere').scrollLeft(L + -250);
+        }
+        function Over_right() {
+            var R = $('#overHere').scrollLeft();
+            $('#overHere').scrollLeft(R + 250);
+        }
+
+
+    </script>
+}
+

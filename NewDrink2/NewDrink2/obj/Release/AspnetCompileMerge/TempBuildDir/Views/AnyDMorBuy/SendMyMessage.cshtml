@@ -1,0 +1,294 @@
+﻿@using NewDrink2.Models
+@model NewDrink2.Models.EmailModelView
+@{   
+    Layout = "~/Views/Shared/_EmailSendPartial.cshtml";
+    string Name = Helper.GetUserName();
+    int DeatilID = ViewBag.DetailID;
+
+    var MemberThis = new ChangeMem() { };
+    if (ViewBag.Member != null)
+    {
+        MemberThis = new ChangeMem() { Member = ViewBag.Member };
+    }
+
+    DateTime time2 = DateTime.Now;
+    time2 = time2.AddHours(2);
+    string timeS = time2.ToString("yyyy-MM-dd HH:mm:ss");
+
+}
+
+ 
+<style>
+    .TextSizeCh {
+        font-family: 'Microsoft JhengHei', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    }
+    .LoadingClass {
+        height: 100%;
+        width: 100%;
+        position: fixed;
+        padding: 0;
+        margin: 0;
+        top: 0;
+        left: 0;
+        background: rgba(40, 40, 40, 0.9);
+        font-size: 16px;
+        color: #5cb85c; 
+        z-index: 999999;
+    }
+    .MySubmit {
+        width: 30%;
+        background-color: #04c6c4;
+        color: #ffffff;
+    }
+    .MySubmit:hover {
+        width: 30%;
+        background-color: #1da09f;
+        color: #ffffff;
+    }
+
+    input[type=checkbox] {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 13px;
+        height: 13px;
+        margin: 0;
+        cursor: pointer;
+        vertical-align: bottom;
+        background: #fff;
+        border: 1px solid #dcdcdc;
+        -webkit-border-radius: 1px;
+        -moz-border-radius: 1px;
+        border-radius: 1px;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        position: relative;
+    }
+
+        input[type=checkbox]:active {
+            border-color: #c6c6c6;
+            background: #ebebeb;
+        }
+
+        input[type=checkbox]:hover {
+            border-color: #c6c6c6;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.1);
+            -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,0.1);
+            box-shadow: inset 0 1px 1px rgba(0,0,0,0.1);
+        }
+        input[type=checkbox]:checked {
+            background: #fff;
+        }
+            input[type=checkbox]:checked::after {
+                content: url("../../image/checkmark.png");
+                display: block;
+                position: absolute;
+                top: -6px;
+                left: -5px;
+            }
+
+        input[type=checkbox]:focus {
+            outline: none;
+            border-color: #4d90fe;
+        }
+</style>
+
+<br /><br /><br />
+<div id="main">
+    @using (Html.BeginForm("SendMyMessage", "AnyDMorBuy", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.OrderID, new { @Value = DeatilID })
+        <p class="text-center">
+            <font class="TextSizeCh text-danger">@ViewBag.EmptyM</font>
+            <font class="TextSizeCh text-danger">@ViewBag.Message</font>
+            <table border="0" cellpadding="0" cellspacing="0" align="center">
+                <tr>
+                    <td width="50px" style="vertical-align: text-top;">
+                        @Html.LabelFor(model => model.Subject, new { @class = "TextSizeCh" })
+                    </td>
+                    <td>
+                        @if (Model != null)
+                        {
+                            @Html.TextBoxFor(model => model.Subject, new { @class = "form-control TextSizeCh" })
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(model => model.Subject, new { @class = "form-control TextSizeCh" })
+                        }                                              
+                        @Html.ValidationMessageFor(model => model.Subject, "", new { @class = "text-danger TextSizeCh" })
+                        <br />
+                    </td>
+                </tr>                
+                <tr>
+                    <td width="50px" style="vertical-align: text-top;">
+                        @Html.LabelFor(model => model.Body, new { @class = "TextSizeCh" })
+                    </td>
+                    <td>
+                        <textarea name="Body" id="Body" class="form-control TextSizeCh" style="height: 100px; width: 600px; resize: none;">
+                            @if (Model != null)
+                            {
+                                @Model.Body
+                            }
+                            else
+                            {
+                                var Bod = Name + "邀請您一起團購飲料!";
+                                @Bod 
+                            }                             
+                        </textarea>
+                        @Html.ValidationMessageFor(model => model.Body, "", new { @class = "text-danger TextSizeCh" })
+                        <br />
+                    </td>
+                </tr>
+                <tr>
+                    <td width="50px" style="vertical-align: text-top;">
+                        @Html.LabelFor(model => model.EndOverTime, new { @class = "TextSizeCh" })
+                    </td>
+                    <td> 
+                        <div style="border: solid 1px #cccccc; border-radius: 5px; padding: 4px 2px 4px 2px; margin-bottom: 5px;">
+                            @*<input type="text" id="SelectDate" value="" name="YearDate" />
+                            <div class="col-sm-4" style="padding-bottom: 5px; padding: 0px 2px 4px 5px">
+                                <select name="hours">
+                                    @for (int i = 1; i <= 6; i++)
+                                    {
+                                        if (i == 2)
+                                        {
+                                            <option selected>@i</option>
+                                        }
+                                        else
+                                        {
+                                            <option>@i</option>
+                                        }
+                                    }
+                                </select>小時
+                            </div>*@
+                            <div style="padding: 3px 0 3px 10px;">
+                                <input type="text" id="SelectDate2" value="@timeS" name="YearDate2" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-M-d H:mm:ss',minDate:'%y-%M-{%d} %H:%m:%s',maxDate:'%y-12-31} %H:%m:%s'})" />
+                                <br />
+                                @Html.CheckBoxFor(model => model.CheckEnd, new { @style = "margin-bottom: 2px;", @checked = "checked" })
+                                系統自動關團
+                            </div>
+                        </div>
+                        <br />
+                    </td>
+                </tr>
+                <tr>
+                    <td width="50px" style="vertical-align: text-top;">
+                        @Html.LabelFor(model => model.Member, new { @class = "TextSizeCh" })                        
+                    </td>
+                    <td style="border: solid 1px #cccccc; border-radius: 5px; padding: 4px 2px 4px 2px">
+                        <div style="max-width: 275px;">
+                            <div class="col-sm-8 TextSizeCh">
+                                <input type="checkbox" name="AllCheck" id="AllCheck" checked="checked" />
+                                <font class="TextSizeCh">全選</font>
+                            </div>
+                            <div id="AllMem">
+                                @{
+                                    if (ViewBag.Member != null)
+                                    {
+                                        Html.RenderAction("_ChangeSendMemberPartial", new { MyMember = MemberThis });
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_ChangeSendMemberPartial");
+                                    }
+                                }
+                                
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </p>
+        <hr />
+
+        if (TempData["message"] != null || ViewBag.Error == "Error")
+        {
+            <center>
+                <div style="background-color: #f2536c; color: #ffffff; max-width: 80%;" class="alert alert-warning TextSizeCh text-center">
+                    <button class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true" style="color: #ffffff;">&times;</span>
+                    </button>
+                    <strong>錯誤:</strong>
+                    寄信過程發生錯誤,請稍候再嘗試.
+                </div>
+            </center>
+        }
+        else
+        {
+            <p class="text-center">
+                <input id="submit" type="submit" class="btn TextSizeCh MySubmit" value="送出揪團訊息" onclick="Loading()" />
+            </p>
+        }   
+    }         
+</div>
+<div id="loading" style="display: none;" class="TextSizeCh text-center LoadingClass">
+    <img src="../image/loading.gif" style="max-width: 50px; margin: 12em auto auto auto" /><br /><br />
+    郵件寄送中.請稍候...<br />
+    <font style="color:#e4566c">
+        寄信過程中請勿按F5,否則可能會造成信件處理錯誤.
+    </font>
+</div>       
+
+@{
+    //var time = DateTime.Now;
+    //var year = time.ToString("yyyy");
+    //var month = time.ToString("MM");
+    //var date = time.ToString("dd");
+ }
+
+@section Scripts{
+    @*<script src="~/Scripts/jquery.dateLists.dev.js"></script>*@
+    <script src="~/Scripts/My97DatePicker/WdatePicker.js"></script>
+    <script>
+       
+        @*$(function () {
+            $('#SelectDate').dateDropDowns({
+                dateFormat: 'yy-MM-DD',
+                monthNames: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'],
+                yearStart: @year, yearEnd: @year,
+                yearOption: @year, monthOption: @month, dayOption: @date
+            });
+        });*@
+
+        $('#AllCheck').change(function (e) {
+            $('#AllMem input:checkbox').prop('checked', $(this).prop("checked"));
+        });
+
+        function Loading(){
+            $('#main').css('display', 'none');
+            $('#submit').css('disable', true);
+            $('#loading').fadeIn();
+
+            document.onkeydown = function (e) {
+                var ev = window.event || e;
+                var code = ev.keyCode || ev.which;
+                if (code == 116) {
+                    ev.keyCode ? ev.keyCode = 0 : ev.which = 0;
+                    cancelBubble = true;
+                    alert('信件寄送中,請耐心等待.');
+                    return false;
+                }
+            }
+        }
+
+        //使用者有輸入時間時自動打勾
+        /*document.getElementById('EndOverTime').onkeyup = function () {
+            if (isNaN(this.value.valueOf()) || this.value == "" || this.value <= 0 || this.value.indexOf(" ") != -1) {
+                $('#CheckEnd').removeAttr('checked');
+            }
+            if (!(this.value == "") || !(this.value <= 0)) {
+                $('#CheckEnd').prop("checked", true);
+            }
+        };
+        document.getElementById('EndOverTime').onblur = function () {
+            if (isNaN(this.value.valueOf()) || this.value == "" || this.value <= 0 || this.value.indexOf(" ") != -1) {
+                $('#CheckEnd').removeAttr('checked');
+            }
+            if (!(this.value == "") || !(this.value <= 0)) {
+                $('#CheckEnd').prop("checked", true);
+            }
+        }*/
+
+    </script>
+}

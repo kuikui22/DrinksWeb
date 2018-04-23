@@ -1,0 +1,45 @@
+﻿@model NewDrink2.Models.UserCanDo
+
+<table class="table table-striped">
+    <tr>
+        <td colspan="4">成員使用介面</td>
+    </tr>
+    <tr>
+        <td>
+            @Html.CheckBoxFor(model => model.BuyDrink, new { onclick = "return false;" })
+            @Html.Label("揪團及訂購")<br />
+
+            @Html.CheckBoxFor(model => model.OrderSet, new { onclick = "return false;" })
+            @Html.Label("訂單管理")
+        </td>
+        <td>
+            @Html.CheckBoxFor(model => model.Message, new { onclick = "return false;" })
+            @Html.Label("通知訊息")
+        </td>
+        <td style="display: none;">
+            @Html.CheckBoxFor(model => model.Callnotice, new { onclick = "return false;" })
+            @Html.Label("催繳通知")
+        </td>
+        <td>
+            @Html.CheckBoxFor(model => model.ChangePsd, new { onclick = "return false;" })
+            @Html.Label("更改密碼")
+        </td>
+    </tr>
+    <tr>
+        <td colspan="4">管理者使用介面</td>
+    </tr>
+    <tr>
+        <td>
+            @Html.CheckBoxFor(model => model.MyUserSet, new { onclick = "return false;" })
+            @Html.Label("成員管理")
+        </td>
+        <td>
+            @Html.CheckBoxFor(model => model.MyMenuSet, new { onclick = "return false;" })
+            @Html.Label("菜單管理")
+        </td>
+        <td></td>
+        <td></td>
+    </tr>
+</table>
+
+

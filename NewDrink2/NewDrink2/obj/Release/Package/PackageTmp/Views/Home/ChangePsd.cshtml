@@ -1,0 +1,64 @@
+﻿@using NewDrink2.Models
+@model NewDrink2.Models.ChangePsdView
+
+@{
+    string BuyDrink = Helper.GetUserBuyDrink();
+    string OrderSet = Helper.GetUserOrderSet();
+    string Message = Helper.GetUserMessage();
+    string Callnotice = Helper.GetUserCallnotice();
+    string ChangePsd = Helper.GetUserChangePsd();
+    string[] UserLimit = { BuyDrink, OrderSet, Message, Callnotice, ChangePsd };
+    Layout = "~/Views/Shared/_SettingHomeLayout.cshtml";
+    ViewBag.Title = "變更密碼";
+}
+
+<style>
+    .TextSizeCh {
+        font-family: 'Microsoft JhengHei', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    }
+    .btnTh {
+        background-color: #04c6c4;
+        color: #ffffff;
+    }
+        .btnTh:hover {
+            background-color: #07908f;
+            color: #ffffff;
+        }
+</style>
+
+<br /><br /><br />
+<div style="margin-left: 1em;" class="TextSizeCh">
+    <h2>@ViewBag.Title</h2>
+
+    @using (Html.BeginForm("ChangePsd", "Home", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        <hr />
+        @Html.ValidationSummary("", new { @class = "text-danger" })
+        <div class="text-danger">@ViewBag.Error</div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.OldPassword, new { @class = "col-md-2 control-label" })
+            <div class="form-md-10">
+                @Html.PasswordFor(m => m.OldPassword, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+            <div class="form-md-10">
+                @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
+            <div class="form-md-10">
+                @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+            </div>
+        </div>
+        <br />
+        <div class="form-group">
+            <div class="form-md-10">
+                <input type="submit" value="變更密碼" class="btn btnTh"/>
+            </div>
+        </div>
+    }
+
+</div>

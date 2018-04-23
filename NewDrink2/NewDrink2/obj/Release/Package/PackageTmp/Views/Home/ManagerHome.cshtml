@@ -1,0 +1,106 @@
+﻿@using NewDrink2.Models
+@{
+    Layout = "~/Views/Shared/_SettingManagerLayout.cshtml";
+    ViewBag.Title = "Home Page";
+    string Identity2 = Helper.GetUserIdentity2();
+    string[] UserLimit = ViewBag.UserLimit;
+    string UserMail = NewDrink2.Models.Helper.GetUserMail();
+    int Mess = NewDrink2.Models.HomeModels.GetHowManyMessage_UseUserEmail(UserMail);
+}
+
+<style>
+    .ListLine {
+        border-left: solid 1px #ffffff;
+        border-right: solid 1px #ffffff;
+        border-bottom: solid 1px #808080;
+    }
+
+    .ListLine2 {
+        border-left: solid 1px #ffffff;
+        border-right: solid 1px #ffffff;
+    }
+
+    .TextSizeCh {
+        font-family: 'Microsoft JhengHei', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    }
+
+    .Success_Psd {
+        margin: 0 auto 0 auto;
+        z-index: 999999999999999;
+        position: absolute;
+        left: 0px;
+        background-color: rgba(65%, 10%, 10%, 0.8);
+        width: 100%;
+        height: 80px;
+        line-height: 80px;
+        color: #ffffff;
+        font-size: 16px;
+        border-radius: 20px;
+    }
+</style>
+
+@if (TempData["message2"] != null)
+{
+    <center>
+        <div id="PsdSuccess" class="Success_Psd text-center" style="display: none;">
+            已成功更改圖片.
+        </div>
+    </center>
+    <script>
+            function operate() {
+                document.getElementById('PsdSuccess').style.display = "";
+                setTimeout("change0()", 1100);
+                setTimeout("change0()", 1300);
+                setTimeout("change1()", 1500);
+                setTimeout("change2()", 1700);
+                setTimeout("change3()", 1900);
+                setTimeout("change4()", 2100);
+                setTimeout("change5()", 2300);
+                setTimeout("change6()", 2700);
+                setTimeout("disappeare()", 3100);
+            }
+            function change0() {
+                document.getElementById('PsdSuccess').style.opacity = '0.7';
+            }
+            function change1() {
+                document.getElementById('PsdSuccess').style.opacity = '0.6';
+            }
+            function change2() {
+                document.getElementById('PsdSuccess').style.opacity = '0.5';
+            }
+            function change3() {
+                document.getElementById('PsdSuccess').style.opacity = '0.4';
+            }
+            function change4() {
+                document.getElementById('PsdSuccess').style.opacity = '0.3';
+            }
+            function change5() {
+                document.getElementById('PsdSuccess').style.opacity = '0.2';
+            }
+            function change6() {
+                document.getElementById('PsdSuccess').style.opacity = '0.1';
+            }
+            function disappeare() {
+
+                document.getElementById('PsdSuccess').style.display = "none";
+            }
+
+            operate();
+
+    </script>
+}
+
+<br /><br /><br />
+<center>
+    <img src="../image/drink3ex.jpg" />
+</center>
+<br /><br />
+<div class="col-md-12">
+    <div class="list-group">
+        @if (Identity2 == "1")
+        {
+            @Html.Partial("_ManagerPartial");
+        }
+    </div>
+</div>
+

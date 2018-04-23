@@ -1,0 +1,62 @@
+﻿@using NewDrink2.Models
+@{
+    string Identity1 = NewDrink2.Models.Helper.GetUserIdentity();
+    string Identity2 = NewDrink2.Models.Helper.GetUserIdentity2();
+    string UserMail = NewDrink2.Models.Helper.GetUserMail();
+    int Mess2 = NewDrink2.Models.HomeModels.GetHowManyMessage_UseUserEmail(UserMail);
+    int EndMsg = NewDrink2.Models.HomeModels.GetHowManyEndMessage_UseUserEmail(UserMail);
+    int Mess = Mess2 + EndMsg;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Drinks!</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            @Html.ActionLink("Drinks!", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li>@Html.ActionLink("訂單管理", "AllOrderView", "AnyDMorBuy")</li>
+                <li>
+                    <a href="@Url.Action("MessageView_New", "Home")">
+                        通知訊息
+                        @if (Mess > 0)
+                        {
+                            <span class="badge">@Mess</span>
+                        }
+                    </a>
+                </li>
+                <li>@Html.ActionLink("訂購/揪團", "AllDM", "AnyDMorBuy")</li>
+                @*<li>@Html.ActionLink("催繳訊息", "Index", "Home")</li>*@
+                @if (Identity2 == "1")
+                {
+                    <li>@Html.ActionLink("管理使用者", "MyUser", "Manager")</li>
+                    <li>@Html.ActionLink("管理菜單", "MyMenu", "Manager")</li>
+                }
+            </ul>
+            @Html.Partial("_LogoutPartial")
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

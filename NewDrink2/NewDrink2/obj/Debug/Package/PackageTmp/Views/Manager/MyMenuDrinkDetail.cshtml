@@ -1,0 +1,38 @@
+﻿@using NewDrink2.Models
+@model NewDrink2.Models.Menu
+
+@{
+    Layout = "~/Views/Shared/_MyMenuLayoutPartial.cshtml";
+    ViewBag.Title = Model.MenuName;
+}
+
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+<h2>@ViewBag.Title</h2>
+<br />
+@Html.ActionLink("新增飲品", "AddDrinks", new { id = Model.ID })
+
+@{
+    Html.RenderAction("_DrinkDetailPartial", new { id = Model.ID, page = ViewBag.Page });
+}
+
+<br />
+<div class="form-action no-color">
+    @Html.ActionLink("切換檢視", "MyMenuDetail", "Manager", new { id = Model.ID }, new { @class = "btn btn-primary" })
+    @Html.ActionLink("返回", "MyMenu", "Manager", routeValues: null, htmlAttributes: new { @class = "btn btn-default" })
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        function Confirm_Form() {
+            if (!confirm("確定要刪除嗎?")) {
+                return false;
+            }
+            else {
+                if (!confirm("一旦刪除就無法復原了. \n 仍然要刪除嗎?")) {
+                    return false;
+                }
+            }
+        }
+    </script>
+}

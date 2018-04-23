@@ -1,0 +1,54 @@
+﻿@using NewDrink2.Models
+@model NewDrink2.Models.DMDetailsView
+@{
+    Layout = null;
+    var type = ViewBag.Tyep;
+    string Identity1 = NewDrink2.Models.Helper.GetUserIdentity();
+    string Identity2 = NewDrink2.Models.Helper.GetUserIdentity2();
+    string UserMail = NewDrink2.Models.Helper.GetUserMail();
+    int Mess = NewDrink2.Models.HomeModels.GetHowManyMessage_UseUserEmail(UserMail);
+}
+<style>
+    .TextChange {
+        text-align: center;
+    }
+        .TextChange td a {
+            display: block;
+            color: #ffffff;
+        }
+            .TextChange td a:hover {
+                background-color: #ffb20c;                
+            }
+            .TextChange td a:active {
+                background-color: #ffb20c;
+            }
+</style>
+
+
+<table style="width: 100%; height: 52px; font-family: 'Microsoft JhengHei', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">
+    <tr class="TextChange" style="line-height: 50px;">
+        @for (int i = 0; i < type.Count; i++)
+        {
+            if (i == 0)
+            {
+                <td nowrap="nowrap" style="min-width: 150px;">
+                    <a href="#@i" aria-controls="@i" role="tab" data-toggle="tab" onclick="SeclectType(@i, '@type[i]', '@ViewBag.OrderID', this)" style="background-color: #ffb20c;">
+                        <font size="4">@type[0]</font>
+                        &nbsp;&nbsp;
+                    </a>
+                </td>
+            }
+            else
+            {
+                <td nowrap="nowrap" style="min-width: 150px;">
+                    <a href="#@i" aria-controls="@i" role="tab" data-toggle="tab" onclick="SeclectType(@i, '@type[i]', '@ViewBag.OrderID', this)">
+                        <font size="4">@type[i]</font>
+                        &nbsp;&nbsp;
+                    </a>
+                </td>
+            }
+        }
+    </tr>
+</table>
+
+

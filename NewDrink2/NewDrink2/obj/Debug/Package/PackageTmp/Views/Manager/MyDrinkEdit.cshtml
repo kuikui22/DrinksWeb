@@ -1,0 +1,179 @@
+﻿@model NewDrink2.Models.DrinkDetails
+
+@{
+    Layout = "~/Views/Shared/_MyMenuLayoutPartial.cshtml";
+    ViewBag.Title = "飲品修改";
+}
+
+<style>
+    select {
+        /*Chrome和Firefox里面的边框是不一样的，所以复写了一下*/
+        border: solid 1px #000;
+        /*很关键：将默认的select选择框样式清除*/
+        appearance: none;
+        -moz-appearance: none;
+        -webkit-appearance: none;
+        /*在选择框的最右侧中间显示小箭头图片*/
+        background: url("../image/arrow.png") no-repeat scroll right center transparent;
+        /*为下拉小箭头留出一点位置，避免被文字覆盖*/
+        padding-right: 14px;
+        cursor: pointer;
+    }
+        /*清除ie的默认选择框样式清除，隐藏下拉箭头*/
+        select::-ms-expand {
+            display: none;
+        }
+</style>
+
+
+<h2>@ViewBag.Title</h2>
+<hr />
+<br />
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.ID) 
+    <p class="text-danger">@ViewBag.EmptyError</p>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.DrinkType, new { @class = "col-md-2 control-label" })
+        <div class="form-md-10">
+            @Html.EditorFor(m => m.DrinkType, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.DrinkType, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.DrinkName, new { @class = "col-md-2 control-label" })
+        <div class="form-md-10">
+            @Html.EditorFor(m => m.DrinkName, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.DrinkName, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.SizeTypeM, new { @class = "col-md-2 control-label" })
+        <div class="form-md-10">
+            @Html.DropDownListFor(model => model.SizeTypeM, Model.SizeType, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.DrinkPrice, new { @class = "col-md-2 control-label" })
+        <div class="form-md-10">
+            @Html.EditorFor(m => m.DrinkPrice, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.DrinkPrice, "", new { @class = "text-danger" })
+            <p class="text-danger">@ViewBag.PriceEmpty</p>
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Sweet, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            <table class="table">
+                <tr class="active">
+                    <td>
+                        甜度種類
+                        <div class="pull-right">
+                            <input type="checkbox" id="checkAllSweet" />全選
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td id="mySweetT">
+                        @for (int i = 0; i < Model.Sweet.Count; i++)
+                        {
+                            @Html.HiddenFor(model => model.Sweet[i].Value)
+                            @Html.CheckBoxFor(model => (model.Sweet[i]).Selected)
+                            @Html.DisplayFor(model => model.Sweet[i].Text)                            
+                            if (i % 3 == 2)
+                            {
+                                <br />
+                            }
+                        }
+                    </td>
+                </tr>
+            </table>
+        </div>     
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.IceHot, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            <table class="table">
+                <tr class="active">
+                    <td>
+                        冰度種類
+                        <div class="pull-right">
+                            <input type="checkbox" id="checkAllIce" />全選
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td id="myIceT">
+                        @for (int i = 0; i < Model.IceHot.Count; i++)
+                        {
+                            @Html.HiddenFor(model => model.IceHot[i].Value)
+                            @Html.CheckBoxFor(model => (model.IceHot[i]).Selected)
+                            @Html.DisplayFor(model => model.IceHot[i].Text)
+                            if (i % 3 == 2)
+                            {
+                                <br />
+                            }
+                        }
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.AddItem, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            <table class="table">
+                <tr class="active">
+                    <td>
+                        配料種類
+                        <div class="pull-right">
+                            <input type="checkbox" id="checkAlladditem" />全選
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td id="myadditemT">
+                        @for (int i = 0; i < Model.AddItem.Count; i++)
+                        {
+                            @Html.HiddenFor(model => model.AddItem[i].Value)
+                            @Html.CheckBoxFor(model => (model.AddItem[i]).Selected)
+                            @Html.DisplayFor(model => model.AddItem[i].Text)
+                            if (i % 3 == 2)
+                            {
+                                <br />
+                            }
+                        }
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+
+    <br />
+    <div class="form-group">
+        <div class="form-md-10">
+            <input type="submit" value="儲存變更" class="btn btn-success" />
+            @Html.ActionLink("返回", "", routeValues: null, htmlAttributes: new { @class = "btn btn-default", @onclick = "javascript: history.go(-1); return false;" })
+        </div>
+    </div>
+}
+
+
+@section Scripts{
+    <script>
+        $('#checkAllSweet').change(function (e) {
+            $('#mySweetT input:checkbox').prop('checked', $(this).prop("checked"));
+        });
+        $('#checkAllIce').change(function (e) {
+            $('#myIceT input:checkbox').prop('checked', $(this).prop("checked"));
+        });
+        $('#checkAlladditem').change(function (e) {
+            $('#myadditemT input:checkbox').prop('checked', $(this).prop("checked"));
+        });
+    </script>    
+}

@@ -1,0 +1,184 @@
+﻿@using NewDrink2.Models
+@model NewDrink2.Models.Add2_DrinksView
+
+@{
+    Layout = "~/Views/Shared/_MyMenuLayoutPartial.cshtml";
+    var MenuName = Model.MenuName;
+    ViewBag.Title = MenuName;
+    //ViewBag.Additem, ViewBag.SweetEmpty, ViewBag.IceEmpty, ViewBag.SizeEmpty
+    List<AddItemCreate> AddItemcreats = null;
+    if (ViewBag.AddItemcreats != null)
+    {
+        AddItemcreats  = ViewBag.AddItemcreats;
+    }
+    string PriceSmall = ViewBag.PriceSmall;
+    string Additem = ViewBag.Additem;
+
+}
+
+<h2>@ViewBag.Title</h2>
+
+<br />
+@using (Html.BeginForm())
+{
+
+<p class="text-danger">@ViewBag.Additem</p>
+<p class="text-danger">@ViewBag.SweetEmpty</p>
+<p class="text-danger">@ViewBag.IceEmpty</p>
+<p class="text-danger">@ViewBag.SizeEmpty</p>
+<div id="MenuType">
+    @{
+        Html.RenderAction("_Add2ButtonMenu", new { MenuID = Model.MenuID, AddItemcreats = AddItemcreats, PriceSmall = PriceSmall, Additem = Additem });
+    }
+</div>
+<br /><br /><br />
+
+   @Html.Label("新增飲品:")
+
+    @Html.ValidationSummary(true)
+
+    @Html.HiddenFor(model => Model.MenuID)
+    @Html.HiddenFor(model => Model.MenuName)
+
+    @Html.LabelFor(model => model.DrinkType)
+    @Html.EditorFor(model => model.DrinkType, new { htmlAttributes = new { @class = "form-control" } })
+    @Html.ValidationMessageFor(model => model.DrinkType, "", new { @class = "text-danger" })
+
+    <br />
+    <p class="text-danger">@ViewBag.EmptyError</p>
+    <p class="text-danger">@ViewBag.PriceSmall</p>    
+    <table class="table" id="newAdd">
+        <tr class="active">
+            <td style="max-width: 200px;">
+                @Html.Label("飲料名稱")
+            </td>               
+            <td>
+                @Html.Label("尺寸")
+            </td>           
+            <td>
+                @Html.Label("甜度")
+            </td>
+            <td>
+                @Html.Label("冰度")
+            </td>
+            <td>
+                @Html.Label("加料")
+            </td>
+            <td>
+                @Html.Label("價錢")
+            </td>
+            @*@foreach (var item in Model.Add2_Drinks_details)
+            {
+                foreach (var itemDe in item.Add2_Drinks_Sizes)
+                {
+                     <td>@itemDe.SizeName</td>
+                }
+                <td>
+                    @Html.LabelFor(m => item.Bathus)
+                </td>
+            }*@ 
+            <td></td>
+        </tr>
+        @if (Model.Add2_Drinks_details == null || Model.Add2_Drinks_details.Count == 0)
+        {
+            <tr>
+                <td>
+                    <p class="text-danger">請增加一列.</p>
+                </td>
+            </tr>
+        }
+        else
+        {
+            foreach (Add2_Drinks_detail item in Model.Add2_Drinks_details)
+            {
+                Html.RenderPartial("_DrinkDetailsEntry2", item);
+            }
+        }
+    </table>
+    <a id="addNewLine" href="#">增加一列</a>
+    <br /><br /><br /><br /><br />
+
+
+    <div class="col-md-10">
+        <div class="container">
+            <input type="submit" value="儲存" class="btn btn-success" name="saveAdd" />
+            @Html.ActionLink("返回", "MyMenu", "Manager", routeValues: null, htmlAttributes: new { @class = "btn btn-default" })
+        </div>
+    </div>
+
+
+    @section Scripts {
+        @if ((!String.IsNullOrEmpty(ViewBag.PriceSmall) && ViewBag.PriceSmall != null) ||(!String.IsNullOrEmpty(ViewBag.Additem) && ViewBag.Additem != null))
+          {
+                <script>
+                    $('#myModal01').modal('show');
+                </script>
+          }
+        <script>
+            $(function () {
+                $("#newAdd").sortable;
+                $("#addNewLine").click(function () {
+                    $.ajax({
+                        type: 'GET',
+                        url: '@Url.Action("_DrinkDetailsEntryRow2", "TypeChangeManager")',
+                        data: { id: @Model.MenuID}
+                    })
+                        .done(function (template) {
+                            $("#newAdd").append(template);
+                        });
+                });
+
+                $("#ItemType").sortable;
+                $("#addItem").click(function () {
+                    $.get('/Manager/_ItemTypeEntryRow', function (template) {
+                        $("#ItemType").append(template);
+                    });
+                });
+                $("#addSweet").click(function () {
+                    $.get('/Manager/_SweetTypeEntryRow', function (template) {
+                        $("#SweetType").append(template);
+                    });
+                });
+                $("#addIce").click(function () {
+                    $.get('/Manager/_IceTypeEntryRow', function (template) {
+                        $("#IceType").append(template);
+                    });
+                });
+                $("#addSize").click(function () {
+                    $.get('/Manager/_SizeTypeEntryRow', function (template) {
+                        $("#SizeType").append(template);
+                    });
+                });
+
+                $('#checkAllSweet').change(function (e) {
+                    $('#SweetCheck input:checkbox').prop('checked', $(this).prop("checked"));
+                });
+                $('#checkAllIce').change(function (e) {
+                    $('#IceCheck input:checkbox').prop('checked', $(this).prop("checked"));
+                });
+                $('#checkAllSize').change(function (e) {
+                    $('#SizeCheck input:checkbox').prop('checked', $(this).prop("checked"));
+                });
+
+
+
+            });
+
+             function Change() {
+        var $this = $(this);
+        var frmValues = $this.serialize();
+            $.ajax({
+                url: '@Url.Action("_Add2ButtonMenu2", "Manager")',
+                method: 'POST',
+                data: frmValues,
+            })
+                .done(function(msg){
+                    $("#MyTypeChangeThis").html(msg);
+                });
+    }
+
+        </script>
+    }
+}
+
+

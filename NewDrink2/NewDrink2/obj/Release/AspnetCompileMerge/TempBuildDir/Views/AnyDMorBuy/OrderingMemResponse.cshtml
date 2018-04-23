@@ -1,0 +1,34 @@
+﻿@using NewDrink2.Models
+@model List<NewDrink2.Models.MyMember_Response>
+
+@foreach (var item in Model)
+{
+    <div class="panel-group" id="@item.UserID" role="tablist" aria-expanded="false">
+        <div class="panel">
+            <div role="button" data-toggle="collapse" data-parent="#nofriend" href='#@item.UserName' aria-expanded="true" aria-controls="collapseOne">
+                <div class="panel-heading" role="tab" id="headingOne" style="background-color: #ffffff; border-bottom: solid 3px #73d7d6">
+                    <h3 class="panel-title TextSizeCh">
+                        <img src="../image/user3.png" style="margin-right: 5px;" />
+                        <font style="color: #04c6c4; font-size: 18px;">@item.UserName</font>
+                        @if (item.Together == false)
+                        {
+                            string anser = "本次不訂飲料";
+                            <font size="4" class="pull-right" style="color: #ff5e73; line-height: 50px; margin-right: 65px;">                               
+                                @anser
+                            </font>
+                            @*<span class="BadgeNew" style="background-color: #04c6c4; position: absolute; right: 0;">X 0</span>*@
+                        }
+                        @if (item.Together == true)
+                        {
+                            string anser = "尚未回覆訂單";
+                            <font size="4" class="pull-right" style="color: #ff5e73; line-height: 50px; margin-right: 65px;">
+                                @anser
+                            </font>
+                            @*<span class="BadgeNew" style="background-color: #04c6c4; position: absolute; right: 0;">X 0</span>*@
+                        }                                               
+                    </h3>
+                </div>
+            </div>           
+        </div>
+    </div>
+}

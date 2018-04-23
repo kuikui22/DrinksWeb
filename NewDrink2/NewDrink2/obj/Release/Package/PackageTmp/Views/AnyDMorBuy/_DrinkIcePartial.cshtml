@@ -1,0 +1,75 @@
+﻿@using NewDrink2.Models
+@model NewDrink2.Models.BuyDMDrinkIce
+
+@{ 
+    //先計算是否是第一次選冰度
+    int TotCount = 0;
+    foreach (var item in Model.IceType)
+    {
+        if (item.Selected == true)
+        {
+            TotCount += 1;
+        }
+    }
+}
+
+<style>
+    .CheckDivIce{
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+        .CheckDivIce:hover {
+            background-color: #4ad7d5;
+            color: #ffffff;
+        }
+</style>
+
+
+@using (Html.BeginCollectionItem2("IceTypeM"))
+{
+    @Html.ValidationMessageFor(model => model.IceTypeM, "", new { @class = "text-danger" })
+    <ul class="list-group text-center" id="" style="height: 290px; padding-bottom: 15px; overflow-y: auto; overflow-x: hidden; font-family: 'Microsoft JhengHei', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">
+        @if (TotCount == 0)
+        {
+            for (int i = 0; i < Model.IceType.Count(); i++)
+            {
+                if (i == 0)
+                {
+                    <li class="list-group-item CheckDivIce" style="border: solid 1px #ffffff; border-radius: 20px; background-color: #4ad7d5; color: #ffffff; max-width: 180px; margin: 10px 10px 8px 10px; " onclick="CheckIce(this);">
+                        @Html.RadioButtonFor(model => model.IceTypeM, Model.IceType[i].Value, new { @checked = true, @style = "display: none;" })
+                        @Html.DisplayFor(model => model.IceType[i].Text)
+                    </li>
+                }
+                else
+                {
+                    <li class="list-group-item CheckDivIce" style="border: solid 1px #ffffff; border-radius: 20px; max-width: 180px; margin: 10px 10px 8px 10px; " onclick="CheckIce(this);">
+                        @Html.RadioButtonFor(model => model.IceTypeM, Model.IceType[i].Value, new { @style = "display: none;" })
+                        @Html.DisplayFor(model => model.IceType[i].Text)
+                    </li>
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < Model.IceType.Count(); i++)
+            {
+                if (Model.IceType[i].Selected == true)
+                {
+                    <li class="list-group-item CheckDivIce" style="border: solid 1px #ffffff; border-radius: 20px; background-color: #4ad7d5; color: #ffffff; max-width: 180px; margin: 10px 8px 5px 10px; " onclick="CheckIce(this);">
+                        @Html.RadioButtonFor(model => model.IceTypeM, Model.IceType[i].Value, new { @checked = true, @style = "display: none;" })
+                        @Html.DisplayFor(model => model.IceType[i].Text)
+                    </li>
+                }
+                else
+                {
+                    <li class="list-group-item CheckDivIce" style="border: solid 1px #ffffff; border-radius: 20px; max-width: 180px; margin: 10px 10px 8px 10px; " onclick="CheckIce(this);">
+                        @Html.RadioButtonFor(model => model.IceTypeM, Model.IceType[i].Value, new { @style = "display: none;" })
+                        @Html.DisplayFor(model => model.IceType[i].Text)
+                    </li>
+                }
+            }
+        }
+    </ul>
+
+}

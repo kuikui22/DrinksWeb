@@ -1,0 +1,332 @@
+﻿@using NewDrink2.Models
+@model NewDrink2.Models.DMDetailsView
+@{     
+    Layout = null;
+    var type = ViewBag.Tyep;
+    string Identity1 = NewDrink2.Models.Helper.GetUserIdentity();
+    string Identity2 = NewDrink2.Models.Helper.GetUserIdentity2();
+    string UserMail = NewDrink2.Models.Helper.GetUserMail();
+    int Mess = NewDrink2.Models.HomeModels.GetHowManyMessage_UseUserEmail(UserMail);
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Drinks!</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <style>
+        a {
+            text-decoration: none !important;
+        }
+
+        .BgColor {
+            background-color: #d7d6d6;
+        }
+
+        .NavbarBgColor {
+            margin-top: 70px;
+        }
+
+        .bottomStyle {
+            width: 50%;
+            height: 48px;
+            display: block;
+            line-height: 48px;
+            text-align: center;
+            color: #ffffff;
+        }
+        .bottomStyleR {
+            width: 90%;
+            height: 48px;
+            display: block;
+            line-height: 48px;
+            text-align: center;
+            background-color: #ef7e2e;
+            color: #ffffff;
+        }
+
+        .bottomStyleL {
+            width: 10%;
+            height: 48px;
+            display: block;
+            line-height: 48px;
+            text-align: center;
+            background-color: #fbca29;
+        }
+        .bgColor {
+            background-color: #ef7e2e;
+            text-align: center;
+            vertical-align: middle;
+            line-height: 45px;
+            color: #fff;
+        }
+
+        .bgColor2 {
+            background-color: #04c6c4;
+            text-align: center;
+            vertical-align: middle;
+            line-height: 45px;
+            color: #fff;
+        }
+
+        .TextSizeCh {
+            font-family: 'Microsoft JhengHei', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
+
+        .OverFlowBar {
+            overflow-y: hidden;
+            overflow-x: hidden;
+            height: 62px;
+        }
+
+        @@media screen and (max-width: 768px) {
+            .OverFlowBar {
+                overflow-y: hidden;
+                overflow-x: auto;
+                height: 62px;
+            }
+        }
+    </style> 
+    <script>
+        function SeclectType(num, myType, OrderID, obj) {
+            //清空顏色
+            $(obj).parent('td').parent('tr').children('td').children('a').each(function () {
+                $(this).css("background-color", "#ffca00");
+            });
+            //改變顏色
+            $(obj).css("background-color", "#ffb20c");
+
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("_DMDetailPartial", "AnyDMorBuy")',
+                data: { id: @Model.MenuID, SearchString: myType, BuyCheck: OrderID }
+            })
+                .done(function (msg) {
+                    $('#' + num).html(msg);
+                });
+        }
+        function Main_over() {
+            $('#Pre_btn').css('opacity', '0.5');
+            $('#Nex_Btn').css('opacity', '0.5');
+        }
+        function Main_out() {
+            $('#Pre_btn').css('opacity', '0');
+            $('#Nex_Btn').css('opacity', '0');
+        }
+        function Over_left() {
+            var L = $('#overHere').scrollLeft();
+            $('#overHere').scrollLeft(L + -250);
+        }
+        function Over_right() {
+            var R = $('#overHere').scrollLeft();
+            $('#overHere').scrollLeft(R + 250);
+        }
+        function Show_S (){
+            document.getElementById('showSearch').style.display = "";
+        }
+        function CheckOne() {
+            $('.bs-example-modal-sm2').map(function () {
+                $(this).modal('hide');
+            });
+        }
+    </script>
+</head>
+<body style=" overflow-y: scroll; overflow-x: hidden;">
+    <div>
+        <nav class="navbar navbar-fixed-top bgColor2 TextSizeCh text-center">
+            <a href="@Url.Action("Index", "Home")">
+                <div class="pull-left">
+                    <font color="#ffffff" size="5" style="line-height: 200%; margin-left: 10px;">
+                        ＜
+                    </font>
+                </div>
+            </a>
+            <div style="margin-top: 5px;">
+                <font color="#ffffff" style="line-height: 200%; font-size: 20px;">
+                    @Html.DisplayFor(model => model.MenuName)
+                </font>
+            </div>
+        </nav>
+
+
+        <a style="position: absolute; right: 20px; top: 10px; z-index: 999999;"  data-toggle="modal" data-target=".bs-example-modal-sm">
+            <img src="../../image/condition.png"/>
+        </a>
+        <div style="position: absolute; right: 60px; top: 13px; z-index: 999999;" onclick="Show_S();">
+            <img src="../../image/search.png" />
+        </div>
+        @using (Html.BeginForm())
+        {
+            <div id="showSearch" class="navbar navbar navbar-fixed-top text-center" style="display: none; z-index: 9999999999; width: 99%;">
+                <input type="text" name="UserSearch" class="form-control TextSizeCh2" style="margin: 8px auto auto 5px; min-width: 100%;" placeholder="搜尋飲料名稱" />
+            </div>
+        }
+
+        <div class="navbar-fixed-top" style="margin-top: 51px; background-color: #ffca00; line-height: 50px; height: 54px;">
+            <div id="overHere" class="OverFlowBar" onmouseover="Main_over();" onmouseout="Main_out();">
+                @{
+                    Html.RenderAction("_DMDetailLayout", new { id = Model.MenuID, BuyCheck = ViewBag.OrderID });
+                }                
+            </div>          
+        </div>
+        <br /><br />
+        @if (ViewBag.OrderID != null)
+        {
+            string OrderID = ViewBag.OrderID;
+            @Html.Hidden("BuyCheck", OrderID);
+        }
+        <div style="margin-top: 10px;">
+            <!-- Tab panes -->
+            <div class="tab-content">
+                @for (int i = 0; i < type.Count; i++)
+                {
+                    if (i == 0)
+                    {
+                        <div role="tabpanel" class="tab-pane fade in active" id="@i">
+                            @{
+                                Html.RenderAction("_DMDetailPartial", new { id = Model.MenuID, SearchString = type[0], BuyCheck = ViewBag.OrderID, UserSearch = ViewBag.UserSearch });
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div role="tabpanel" class="tab-pane fade" id="@i">
+                            @{
+                                Html.RenderAction("_DMDetailPartial", new { id = Model.MenuID, SearchString = type[i], BuyCheck = ViewBag.OrderID, UserSearch = ViewBag.UserSearch });
+                             }
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+
+        <br /><br /><br /><br /><br />
+        @*如果資料庫有找到使用者有訂單的飲料就換成"確認商品"*@
+        @if (ViewBag.TotBuy != null || ViewBag.TotBuy > 0)
+        {
+            @*如果是團員的話,依照揪團的訂單連結進來可以在此選擇不訂購*@
+            if (ViewBag.LeaderID != ViewBag.UserID && ViewBag.TotBuy == 0)
+            {
+                <nav class="navbar navbar-default navbar-fixed-bottom bgColor">                  
+                    <a href="#" data-toggle="modal" data-target=".bs-example-modal-sm2">
+                        <div class="pull-left bottomStyleL">
+                            @*<font size="4" class="TextSizeCh" style="color: #e4566c"> 不訂 </font>*@
+                            <img src="../../image/NoDrink.png"/>
+                        </div>
+                    </a>
+                    <a href="@Url.Action("OrderingDetail", "AnyDMorBuy", new { OrderID = ViewBag.OrderID })">
+                        <div class="pull-right bottomStyleR">
+                            <font size="4" class="TextSizeCh">確認商品x @ViewBag.TotBuy</font>
+                        </div>
+                    </a>
+                </nav>
+            }
+            else
+            {
+                <nav class="navbar navbar-default navbar-fixed-bottom bgColor">
+                    <a href="@Url.Action("OrderingDetail", "AnyDMorBuy", new { OrderID = ViewBag.OrderID })">
+                        <div style="max-width: 100%; color: #fff;">
+                            <font size="4">確認商品x @ViewBag.TotBuy</font>
+                        </div>
+                    </a>
+                </nav>
+            }
+
+        }
+        else
+        {
+            <nav class="navbar navbar-default navbar-fixed-bottom NavbarBgColor" style="background-color: #ff5e73;">
+                <a href="@Url.Action("SendMessage_GetMenu", "AnyDMorBuy", new { MenuID = Model.MenuID })">
+                    <div class="pull-left bottomStyle">
+                        <font size="4">揪團</font>
+                    </div>
+                </a>
+                <a href="#" data-toggle="modal" data-target=".bs-example-modal-smNo" @*onclick="alert('您尚未點選飲料'); return false;"*@>
+                    <div class="pull-right bottomStyle" style="border-left: solid 2px #ffffff;">
+                        <font size="4">自己訂</font>
+                    </div>
+                </a>
+            </nav>
+        }
+    </div>
+
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog modal-sm" role="document" style="width: 400px">
+            <div class="modal-content" style="padding: 10px 0 10px 0;">
+                <center class="TextSizeCh">
+                    <font style="font-size: 18px">店家資訊</font><br />
+                    電話: @Html.DisplayFor(m => m.MenuPhon)<br />
+                    外送條件:
+                    @if (Model.OrderCondition != "無")
+                    {
+                        <br />
+                    }
+                    @Html.DisplayFor(m => m.OrderCondition)
+                </center>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade bs-example-modal-sm2" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content" style="border-radius: 20px;">
+                <div class="modal-body text-center TextSizeCh">
+                    <font style="font-size: 16px; font-weight: bolder; color: #727272; margin-bottom: 20px;" class="modal-title text-center">提示</font><br />
+                    <font style="color: #cccccc; margin-bottom: 10px; margin-top: 20px;">一旦確定不訂購就無法再於此訂單訂購了. <br />仍然不訂購嗎?</font>
+                    <p class="text-center TextSizeCh" style=" margin-top: 20px;">
+                        <a href="#" class="btn btn-default" data-dismiss="modal" style="width: 30%; border-radius: 20px;">取消</a>
+                        <a href="#" data-toggle="modal" data-target=".bs-example-modal-sm3" class="btn btn-info" style="width: 30%; border-radius: 20px; background: #04c6c4" onclick="CheckOne()">確認</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade bs-example-modal-sm3" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content" style="border-radius: 20px;">
+                <div class="modal-body text-center TextSizeCh">
+                    <font style="font-size: 16px; font-weight: bolder; color: #727272; margin-bottom: 20px;" class="modal-title text-center">提示</font><br />
+                    <font style="color: #cccccc; margin-bottom: 10px; margin-top: 20px;">真的確定不訂購嗎?</font>
+                    <p class="text-center TextSizeCh" style=" margin-top: 20px;">
+                        <a href="#" class="btn btn-default" data-dismiss="modal" style="width: 30%; border-radius: 20px;">取消</a>
+                        <a href="@Url.Action("CheckNotTogether_DetailDM", "Home", new { OrderID = ViewBag.OrderID })" class="btn btn-info" style="width: 30%; border-radius: 20px; background: #04c6c4">確認</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade bs-example-modal-smNo" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content" style="border-radius: 20px;">
+                <div class="modal-body text-center TextSizeCh">
+                    <font style="font-size: 16px; font-weight: bolder; color: #727272; margin-bottom: 20px;" class="modal-title text-center">提示</font><br />
+                    <font style="color: #cccccc; margin-bottom: 10px; margin-top: 20px;">您尚未點選飲料.</font>
+                    <p class="text-center TextSizeCh" style=" margin-top: 20px;">
+                        <a href="#" class="btn btn-default" data-dismiss="modal" style="width: 30%; border-radius: 20px; background: #04c6c4; color: #ffffff;">確定</a>                      
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+    
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+</body>
+
+</html>
+
+
+
+
+
+

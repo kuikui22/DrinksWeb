@@ -1,0 +1,72 @@
+﻿@model PagedList.IPagedList<NewDrink2.Models.Menu>
+@using PagedList.Mvc;
+
+@{ 
+    Layout = "~/Views/Shared/_MyMenuLayoutPartial.cshtml";
+}
+
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+<h2>管理菜單</h2>
+<br />
+@Html.ActionLink("新增菜單", "AddMenu", routeValues: null)
+<table class="table">
+    <tr class="active">
+        <th>
+            @Html.DisplayName("菜單名稱")
+        </th>
+        <th>
+            @Html.DisplayName("建立時間")
+        </th>
+        <th>
+            @Html.DisplayName("開放")
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.MenuName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreateTime)
+            </td>
+            <td>
+                @if (item.Open == true)
+                {
+                    @Html.DisplayName("已開放")
+                }
+                else if (item.Open == false)
+                {
+                    @Html.DisplayName("未開放")
+                }
+            </td>
+            <td>
+                @Html.ActionLink("詳細", "MyMenuDrinkDetail", new { id = item.ID })
+                @Html.ActionLink("刪除", "MyMenuDelete", new { id = item.ID }, new { @onclick = "return Confirm_Form()" })
+            </td>
+        </tr>
+    }
+
+</table>
+
+頁數 @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) 至 @Model.PageCount
+@Html.PagedListPager(Model, page => Url.Action("MyMenu", new { page }))
+@Html.ActionLink("返回", "Index", "Home", routeValues: null, htmlAttributes: new { @class = "btn btn-default" })
+
+@section Scripts{
+    <script type="text/javascript">
+        function Confirm_Form() {
+            if (!confirm("確定要刪除嗎?")) {
+                return false;
+            }
+            else {
+                if (!confirm("一旦刪除就無法復原了. \n 仍然要刪除嗎?")) {
+                    return false;
+                }
+            }
+        }
+    </script>
+}

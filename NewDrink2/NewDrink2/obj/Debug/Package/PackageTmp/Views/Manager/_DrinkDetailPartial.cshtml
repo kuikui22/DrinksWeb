@@ -1,0 +1,57 @@
+﻿@model PagedList.IPagedList<NewDrink2.Models.MenuDrinkNameType>
+@using PagedList.Mvc;
+@{
+    int id = 0;
+    foreach (var item in Model)
+    {
+        id = item.MenuID;
+    }
+}
+
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+<table class="table">
+    <tr class="active">
+        <th>飲料種類</th>
+        <th>飲料名稱</th>
+        <th>大小</th>
+        <th>單價</th>
+        <th>甜度</th>
+        <th>冰度</th>
+        <th>配料</th>
+        <th></th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DrinkType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DrinkName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SizeName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DrinkPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CanUseSweet) 種
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CanUseIce) 種
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CanUseAddItem) 種
+            </td>
+            <td>
+                @Html.ActionLink("編輯", "MyDrinkEdit", new { SizePid = item.SizePID })
+                @Html.ActionLink("刪除", "MyDrinkDelete", new { SizePid = item.SizePID }, new { @onclick = "return Confirm_Form()" })
+            </td>
+        </tr>
+    }
+</table>
+
+頁數 @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) 至 @Model.PageCount
+@Html.PagedListPager(Model, page => Url.Action("MyMenuDrinkDetail", new { page, id = id }))

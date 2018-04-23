@@ -1,0 +1,113 @@
+﻿@using NewDrink2.Models
+@model IEnumerable<NewDrink2.Models.LeaderSendMessage>
+
+@{
+    Layout = "~/Views/Shared/_MessageViewPartial.cshtml";
+}
+<style>
+    a {
+        text-decoration: none !important;
+    }
+
+    .bottomStyleR {
+        width: 90%;
+        height: 48px;
+        display: block;
+        line-height: 48px;
+        text-align: center;
+        background-color: #e4566c;
+        color: #ffffff;
+    }
+
+    .bottomStyleL {
+        width: 10%;
+        height: 48px;
+        display: block;
+        line-height: 48px;
+        text-align: center;
+        background-color: #fbca29;
+    }
+
+    .NavbarBgColor {
+        margin-top: 50px;
+    }
+
+    .TopStyle {
+        width: 33%;
+        height: 48px;
+        display: block;
+        line-height: 48px;
+        text-align: center;
+    }
+
+    .bottomTotNav {
+        margin-bottom: 50px;
+    }
+    .TextSizeCh {
+        font-family: 'Microsoft JhengHei', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    }
+    .ALink {
+        color: #04c6c4;
+        font-size: 16px;
+    }
+
+        .ALink:hover {
+            color: #6beeed;
+        }
+</style>
+<nav class="navbar navbar-fixed-top NavbarBgColor" style="border-bottom: solid 1px #c1bdbd; background-color: #ffffff">
+    <a href="@Url.Action("MessageView_New", "Home")" style="color: #04c6c4">
+        <div class="pull-left TopStyle">
+            <font size="3" class="TextSizeCh">新訊息</font>
+        </div>
+    </a>
+    <a href="@Url.Action("MessageView_Read", "Home")" style="color: #04c6c4">
+        <div class="pull-right TopStyle">
+            <font size="3" class="TextSizeCh">已讀訊息</font>
+        </div>
+    </a>
+    <a href="#" style="color: #04c6c4">
+        <div class="pull-right TopStyle" style="border-bottom: solid 4px #04c6c4">
+            <font size="3" class="TextSizeCh">已寄送的訊息</font>
+        </div>
+    </a>
+</nav>
+
+<div style="margin-top: 50px;">
+    @if (!String.IsNullOrEmpty(ViewBag.NoMsg))
+    {
+        <br /><br />
+        <p class="text-center TextSizeCh" style="color: #04c6c4">@ViewBag.NoMsg</p>
+    }    
+    @if (String.IsNullOrEmpty(ViewBag.NoMsg))
+    {
+        <div class="panel panel-default">
+            @foreach (var item in Model)
+            {
+                <div class="panel-body listsline" style="font-size: 18px; border-bottom: solid 1px #d5d4d4;">
+                    <div class="pull-left TextSizeCh" style="min-width: 65%;">
+                        <div class="pull-left" style="line-height: 50px; margin-right: 10px;">
+                            <img src="../image/drink3ex2.png" />
+                        </div>
+                        <font style="color: #808080">
+                            主旨:
+                            @Html.DisplayFor(modelItem => item.Subject)
+                        </font><br />
+                        <a href="@Html.DisplayFor(modelItem => item.Alink)" class="ALink">
+                            <img src="../../image/timer.png" style="max-width: 15px;" />
+                            @Html.DisplayFor(modelItem => item.SendTime)
+                        </a>                     
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@if (TempData["message"] != null)
+{
+    <script>
+        var message = @Html.Raw(Json.Encode(TempData["message"]));
+        alert(message);
+    </script>
+}
